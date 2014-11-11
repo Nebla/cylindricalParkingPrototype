@@ -1,0 +1,8 @@
+Dependencies Installation Instruccions
+
+- Decompress web.py-0.37.tar.gz
+- In web.py-0.37 run $> sudo setup.py install
+
+Running Instructions
+
+-
