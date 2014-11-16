@@ -1,6 +1,6 @@
 __author__ = 'fsoler'
 import unittest
-from Common import Cylinder, Vehicle, Weights, Sector
+from parking_app.Common import Cylinder, Vehicle, Weights, Sector
 
 
 class TestCylinderFunctions(unittest.TestCase):

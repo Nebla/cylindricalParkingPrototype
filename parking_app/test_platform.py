@@ -1,5 +1,5 @@
 from unittest import TestCase
-from Common import Platform, Vehicle, Weights
+from parking_app.Common import Platform, Vehicle, Weights
 
 __author__ = 'fsoler'
 
