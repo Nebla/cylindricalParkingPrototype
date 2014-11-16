@@ -29,14 +29,15 @@ class TestCylinderFunctions(unittest.TestCase):
                          "the amount occupied must be 0")
 
         car = Vehicle(1, Weights.heavy)
-        [level, column] = self.cylinder.get_position_to_save_car(Sector.lower)
         hours = 3
+        [level, column] = self.cylinder.get_position_to_save_car(hours)
+
         self.cylinder.add_car(car, level, column, hours)
 
         self.assertEqual(self.cylinder.get_amount_occupied(), 1,
                          "the amount occupied must be 1")
         self.assertEqual(self.cylinder.get_actual_weight(), Weights.heavy.value,
-                         "the weight must be initialized with 0")
+                         "the weight must be the cars one")
 
     def test_adding_two_cars_in_same_platform(self):
         car = Vehicle(1, Weights.heavy)
@@ -50,40 +51,62 @@ class TestCylinderFunctions(unittest.TestCase):
     def test_get_position_to_save_car(self):
         hours = 1
         pos = self.cylinder.get_position_to_save_car(hours)
-        self.assertEqual(pos, Sector.lower)
+        self.assertEqual(pos, [0, 0])
 
         hours = 2.8
         pos = self.cylinder.get_position_to_save_car(hours)
-        self.assertEqual(pos, Sector.lower)
+        self.assertEqual(pos, [0, 0])
 
         hours = 3
         pos = self.cylinder.get_position_to_save_car(hours)
-        self.assertEqual(pos, Sector.middle)
+        self.assertEqual(pos, [1, 0])
 
         hours = 11.9
         pos = self.cylinder.get_position_to_save_car(hours)
-        self.assertEqual(pos, Sector.middle)
+        self.assertEqual(pos, [1, 0])
 
         hours = 12
         pos = self.cylinder.get_position_to_save_car(hours)
-        self.assertEqual(pos, Sector.high)
+        self.assertEqual(pos, [2, 0])
 
         hours = 50
         pos = self.cylinder.get_position_to_save_car(hours)
-        self.assertEqual(pos, Sector.high)
-
+        self.assertEqual(pos, [2, 0])
 
     def test_get_car(self):
-        self.fail()
+        car = Vehicle(1, Weights.heavy)
+        level = 1
+        column = 0
+        hours = 3
+        self.cylinder.add_car(car, level, column, hours)
+
+        retired_car = self.cylinder.get_car(level, column)
+        self.assertEqual(retired_car, car, "must be the same car")
 
     def test_get_two_cars_from_same_platform(self):
-        self.fail()
+        car = Vehicle(1, Weights.heavy)
+        level = 1
+        column = 0
+        hours = 3
+        self.cylinder.add_car(car, level, column, hours)
+
+        retired_car = self.cylinder.get_car(level, column)
+        self.assertRaises(Exception, self.cylinder.get_car, level, column)
 
     def test_sector_has_space(self):
-        self.fail()
+        self.assertTrue(self.cylinder.sector_has_space(Sector.lower))
+        self.assertTrue(self.cylinder.sector_has_space(Sector.middle))
+        self.assertTrue(self.cylinder.sector_has_space(Sector.high))
 
     def test_sector_has_no_space(self):
-        self.fail()
+        car = Vehicle(1, Weights.heavy)
+        level = 1
+        column = 0
+        hours = 3
+        self.cylinder.add_car(car, level, column, hours)
+        self.assertTrue(self.cylinder.sector_has_space(Sector.lower))
+        self.assertFalse(self.cylinder.sector_has_space(Sector.middle))
+        self.assertTrue(self.cylinder.sector_has_space(Sector.high))
 
     def test_completing_cylinder(self):
         car = Vehicle(1, Weights.heavy)

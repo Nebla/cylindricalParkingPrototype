@@ -25,15 +25,14 @@ class Weights(Enum):
 
 
 class Sector(Enum):
-    lower = 0
-    middle = 1
-    high = 2
+    lower = 3
+    middle = 12
+    high = 9999
 
     # it would be better add a function that determines the sector from hours
 
 
 class Vehicle():
-
     def __init__(self, patent, weight=Weights['veryLight']):
         self._patent = patent
         self._weight = weight
@@ -46,7 +45,6 @@ class Vehicle():
 
 
 class Platform():
-
     TimeFormat = "%y-%m-%dT%H:%M:%S +0000"
 
     def __init__(self, level, column):
@@ -65,7 +63,7 @@ class Platform():
     def __sec2hour(seconds):
         return seconds / 3600
 
-    #length_of_stay expressed in horas
+    # length_of_stay expressed in horas
     def save_car(self, car, length_of_stay):
         if self.__isOccupied:
             raise Exception("this platform is occupied, can not add a car")
@@ -99,7 +97,6 @@ class Platform():
 
 
 class Cylinder():
-
     def __init__(self, levels=6, columns=3):
         self.__platforms = [[Platform(lvl, column) for column in range(columns)] for lvl in range(levels)]
         self._qttyLevels = levels
@@ -112,6 +109,7 @@ class Cylinder():
         self.__platforms[level][column].save_car(car, length_of_stay)
         self._qttyOccupied += 1
         self._totalWeight += car.get_weight()
+
     '''
     def get_position_to_save_car(self, level):
         level_range = self.__calculate_sector(level)
@@ -120,7 +118,8 @@ class Cylinder():
         return col_weights.index(min(col_weights))
     '''
 
-    def get_position_to_save_car(self, sector):
+    def get_position_to_save_car(self, length_of_stay):
+        sector = self.__get_sector_from_time(length_of_stay)
         level_range = self.__calculate_range_levels(sector)
         col_weights = [sum([self.__platforms[lvl][col].get_weight() for lvl in level_range])
                        for col in range(self._qttyColumns)]
@@ -128,10 +127,10 @@ class Cylinder():
         temp_platforms = self.__platforms
         for _ in range(self._qttyColumns):
             col = col_weights.index(min(col_weights))
-            #aca hago un for de los niveles para ver si encuentro lugar
+            # aca hago un for de los niveles para ver si encuentro lugar
             for lvl in level_range:
                 if temp_platforms[lvl][col].is_empty():
-                    return [col, lvl]
+                    return [lvl, col]
             col_weights.pop(col)
             [temp_platforms[lvl].pop(col) for lvl in level_range]
 
@@ -145,13 +144,14 @@ class Cylinder():
 
     def sector_has_space(self, sector):
         level_range = self.__calculate_range_levels(sector)
-        occupied_list = [col for col in range(self._qttyColumns) for lvl in
-                         level_range if self.__platforms[lvl][col].is_empty()]
-        return False if occupied_list else True
+        free_list = [col for col in range(self._qttyColumns) for lvl in
+                     level_range if self.__platforms[lvl][col].is_empty()]
+        return True if free_list else False
 
     def has_space(self):
         return self._qttyOccupied != self._qttyPlatforms
 
+    '''
     def get_level_type(self, level):
         min_level = self.__calculate_min_level(level)
         return Sector(min_level + 1)
@@ -162,7 +162,21 @@ class Cylinder():
     def __calculate_sector(self, level):
         min_level = self.__calculate_min_level(level)
         return range(min_level, min_level + Sector.high)
+    '''
+
+    @staticmethod
+    def __get_sector_from_time(length_of_stay):
+        for sector in Sector:
+            if sector.value > length_of_stay:
+                return sector
+        return Sector.high
 
     def __calculate_range_levels(self, sector):
-        min_level = int(sector.value * self._qttyLevels / len(Sector))
-        return list(range(min_level, min_level + len(Sector)))
+        i = 0
+        for sec in Sector:
+            if sec == sector:
+                break
+            i += 1
+        len_sector = int(self._qttyLevels / len(Sector))
+        min_level = int(i * len_sector)
+        return list(range(min_level, min_level + len_sector))
