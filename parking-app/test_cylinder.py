@@ -48,7 +48,30 @@ class TestCylinderFunctions(unittest.TestCase):
         self.assertRaises(Exception, self.cylinder.add_car, car, level, column, hours)
 
     def test_get_position_to_save_car(self):
-        self.fail()
+        hours = 1
+        pos = self.cylinder.get_position_to_save_car(hours)
+        self.assertEqual(pos, Sector.lower)
+
+        hours = 2.8
+        pos = self.cylinder.get_position_to_save_car(hours)
+        self.assertEqual(pos, Sector.lower)
+
+        hours = 3
+        pos = self.cylinder.get_position_to_save_car(hours)
+        self.assertEqual(pos, Sector.middle)
+
+        hours = 11.9
+        pos = self.cylinder.get_position_to_save_car(hours)
+        self.assertEqual(pos, Sector.middle)
+
+        hours = 12
+        pos = self.cylinder.get_position_to_save_car(hours)
+        self.assertEqual(pos, Sector.high)
+
+        hours = 50
+        pos = self.cylinder.get_position_to_save_car(hours)
+        self.assertEqual(pos, Sector.high)
+
 
     def test_get_car(self):
         self.fail()
@@ -62,12 +85,23 @@ class TestCylinderFunctions(unittest.TestCase):
     def test_sector_has_no_space(self):
         self.fail()
 
-    def test_has_space_method(self):
+    def test_completing_cylinder(self):
+        car = Vehicle(1, Weights.heavy)
+        level = 0
+        column = 0
+        hours = 3
+
+        self.assertTrue(self.cylinder.has_space())
+        self.cylinder.add_car(car, level, column, hours)
         self.assertTrue(self.cylinder.has_space())
 
+        level = 1
+        self.cylinder.add_car(car, level, column, hours)
+        self.assertTrue(self.cylinder.has_space())
 
-    def test_completing_cylinder(self):
-        self.fail()
+        level = 2
+        self.cylinder.add_car(car, level, column, hours)
+        self.assertFalse(self.cylinder.has_space())
 
     class CylinderExtension(Cylinder):
 
