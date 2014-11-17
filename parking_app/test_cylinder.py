@@ -1,6 +1,6 @@
 __author__ = 'fsoler'
 import unittest
-from Common import Cylinder, Vehicle, Weights, Sector
+from parking_app.Common import Cylinder, Vehicle, Weights, Sector
 
 
 class TestCylinderFunctions(unittest.TestCase):
@@ -73,6 +73,15 @@ class TestCylinderFunctions(unittest.TestCase):
         pos = self.cylinder.get_position_to_save_car(hours)
         self.assertEqual(pos, [2, 0])
 
+    def test_get_position_to_save_car_returns_none(self):
+        car = Vehicle(1, Weights.heavy)
+        level = 1
+        column = 0
+        hours = 4
+        self.cylinder.add_car(car, level, column, hours)
+
+        self.assertFalse(self.cylinder.get_position_to_save_car(hours))
+
     def test_get_car(self):
         car = Vehicle(1, Weights.heavy)
         level = 1
@@ -125,6 +134,16 @@ class TestCylinderFunctions(unittest.TestCase):
         level = 2
         self.cylinder.add_car(car, level, column, hours)
         self.assertFalse(self.cylinder.has_space())
+
+    def test_calculate_sector(self):
+        level = 0
+        self.assertEqual(self.cylinder.calculate_sector(level),Sector.lower)
+
+        level = 1
+        self.assertEqual(self.cylinder.calculate_sector(level),Sector.middle)
+
+        level = 2
+        self.assertEqual(self.cylinder.calculate_sector(level),Sector.high)
 
     class CylinderExtension(Cylinder):
 

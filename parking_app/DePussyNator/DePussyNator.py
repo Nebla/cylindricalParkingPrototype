@@ -22,11 +22,14 @@ class DePussyNator():
         #TODO
         pass
 
+    def run(self):
+        while True:
+            car = self.obtainCar()
+            if not self.placeCarIntoGarage(car):
+                self.waitForPlaceIntoGarage()
+                self.placeCarIntoGarage(car)
+
 if __name__ == "__init__":
     pussyNatorController = DePussyNator()
     pussyNatorController.initialize()
-    while True:
-        car = pussyNatorController.obtainCar()
-        if not pussyNatorController.placeCarIntoGarage(car):
-            pussyNatorController.waitForPlaceIntoGarage()
-            pussyNatorController.placeCarIntoGarage(car)
+    pussyNatorController.run()

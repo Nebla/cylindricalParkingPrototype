@@ -1,5 +1,5 @@
 from unittest import TestCase
-from Common import Platform, Vehicle, Weights
+from parking_app.Common import Platform, Vehicle, Weights
 
 __author__ = 'fsoler'
 
@@ -12,6 +12,9 @@ class TestPlatform(TestCase):
         self.level = 1
         self.column = 3
         self.platform = Platform(self.level, self.column)
+
+    def test_get_level(self):
+        self.assertEqual(self.platform.level, self.level)
 
     def test_save_car(self):
         hours = 3
