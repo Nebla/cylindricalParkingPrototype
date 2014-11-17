@@ -4,6 +4,7 @@ import sys
 from PyQt4 import QtGui
 
 from UI.CylinderUI import CylinderUI
+from UI.CarFormUI import CarFormUI
 
 class ParkingUI(QtGui.QMainWindow):
 
@@ -84,6 +85,10 @@ class ParkingUI(QtGui.QMainWindow):
 
     def addNewCar(self):
         print "Show pop up to add new car"
+        self.carForm = CarFormUI()
+        self.carForm.resize(400, 200)
+        self.carForm.move(50,50)
+        self.carForm.show()
 
 def main():
 
