@@ -23,14 +23,11 @@ class SlotUI(QtGui.QWidget):
             color = QtGui.QColor(0, 255, 0)
         elif value == 1:
             color = QtGui.QColor(0, 0, 255)
-            label = QtGui.QLabel()
+            lbl1 = QtGui.QLabel('Zetcode', self)
             pixmap = QtGui.QPixmap("Clock.png")
-            pixmap = pixmap.scaled(15, 15, QtCore.Qt.KeepAspectRatio)
-            label.setPixmap(pixmap)
-            label.move(15,15)
-
-
-
+            pixmap = pixmap.scaled(30, 30, QtCore.Qt.KeepAspectRatio)
+            lbl1.setPixmap(pixmap)
+            lbl1.move(0, 0)
 
         elif value == 2:
             color = QtGui.QColor(150, 150, 150)

@@ -26,17 +26,17 @@ class ParkingUI(QtGui.QMainWindow):
         # Se muestra Error en caso de que haya algun problema con algun cilindro
         self.statusBar().showMessage('Normal')
 
-        cylinder1 = CylinderUI()
-        cylinder2 = CylinderUI()
-        cylinder3 = CylinderUI()
+        self.cylinder1 = CylinderUI()
+        self.cylinder2 = CylinderUI()
+        self.cylinder3 = CylinderUI()
 
         # main layout
         self.mainLayout = QtGui.QHBoxLayout()
 
         # add all main to the main vLayout
-        self.mainLayout.addWidget(cylinder1)
-        self.mainLayout.addWidget(cylinder2)
-        self.mainLayout.addWidget(cylinder3)
+        self.mainLayout.addWidget(self.cylinder1)
+        self.mainLayout.addWidget(self.cylinder2)
+        self.mainLayout.addWidget(self.cylinder3)
 
         # central widget
         centralWidget = QtGui.QWidget()
@@ -58,8 +58,16 @@ class ParkingUI(QtGui.QMainWindow):
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(QtGui.qApp.quit)
 
+        alarmAction = QtGui.QAction(QtGui.QIcon('Warning.png'), 'Random Error', self)
+        alarmAction.triggered.connect(self.createCustomAlarm);
+
+        newCarAction= QtGui.QAction(QtGui.QIcon('Car.png'), 'Park Car', self)
+        newCarAction.triggered.connect(self.addNewCar);
+
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(exitAction)
+        self.toolbar.addAction(alarmAction)
+        self.toolbar.addAction(newCarAction)
 
 
     def center(self):
@@ -69,6 +77,13 @@ class ParkingUI(QtGui.QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
+
+    def createCustomAlarm(self):
+        # Show that the slot has been called.
+        print "Generating a custom error"
+
+    def addNewCar(self):
+        print "Show pop up to add new car"
 
 def main():
 
