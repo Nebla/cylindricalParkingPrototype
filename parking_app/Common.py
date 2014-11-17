@@ -7,13 +7,14 @@ import calendar
 '''
 esta clase alarma es para reordenar los autos o sacarlos, el mensaje pone la alarma en deliver
 '''
-
+# this is the margin time to deliver the car, in seconds
+Margin_time = 9000
 
 class Alarm(Enum):
     deliver = 0
-    lessThan15Min = 1
-    oneLevelDown = 2
-    twoLevelDown = 3
+    oneLevelDown = 1
+    twoLevelDown = 2
+    lessThanMarginTime = 3
 
 
 class Weights(Enum):
@@ -94,6 +95,10 @@ class Platform():
 
     def is_empty(self):
         return not self.__isOccupied
+
+    @property
+    def level(self):
+        return self.__level
 
 
 class Cylinder():
