@@ -13,18 +13,19 @@ class PlatformController():
 
     def get_used_platforms(self):
         #TODO
-        pass
+        return [Common.Platform(1,1)]
 
     def set_alarm(self, alarm):
         pass
 
     def is_marked_to_leave(self, platform):
         #TODO
-        pass
+        return False
 
     def get_sector_from_level(self, level):
         #todo
-        pass
+        # once the cylinder is obtained, here is executed calculate_sector method
+        return False
 
     def sleep_one_minute(self):
         #todo
@@ -48,11 +49,12 @@ class PlatformController():
                         if sec.value/2 > remaining_time:
                             sector_list = [i for i in Common.Sector]
                             lvl_down = sector_list.index(sector) - sector_list.index(sec)
-                            if lvl_down > 0: self.set_alarm(Common.Alarm(lvl_down))
+                            if lvl_down > 0:
+                                self.set_alarm(Common.Alarm(lvl_down))
                             break
             self.sleep_one_minute()
 
 if __name__ == "__init__":
-    platformController = PlatformController()
-    platformController.initialize()
-    platformController.run()
+    platform_controller = PlatformController()
+    platform_controller.initialize()
+    platform_controller.run()

@@ -102,7 +102,8 @@ class Platform():
 
 
 class Cylinder():
-    def __init__(self, levels=6, columns=3):
+    def __init__(self, id, levels=6, columns=3):
+        self.__id = id
         self.__platforms = [[Platform(lvl, column) for column in range(columns)] for lvl in range(levels)]
         self._qttyLevels = levels
         self._qttyColumns = columns
@@ -156,18 +157,10 @@ class Cylinder():
     def has_space(self):
         return self._qttyOccupied != self._qttyPlatforms
 
-    '''
-    def get_level_type(self, level):
-        min_level = self.__calculate_min_level(level)
-        return Sector(min_level + 1)
-
-    def __calculate_min_level(self, level):
-        return int(Sector.high*level/self._qttyLevels) - 1
-
-    def __calculate_sector(self, level):
-        min_level = self.__calculate_min_level(level)
-        return range(min_level, min_level + Sector.high)
-    '''
+    def calculate_sector(self, level):
+        sector_list = [sec for sec in Sector]
+        index = int(len(Sector)*level/self._qttyLevels)
+        return sector_list[index]
 
     @staticmethod
     def __get_sector_from_time(length_of_stay):
@@ -177,11 +170,15 @@ class Cylinder():
         return Sector.high
 
     def __calculate_range_levels(self, sector):
-        i = 0
-        for sec in Sector:
-            if sec == sector:
-                break
-            i += 1
+        index = [i for i in Sector].index(sector)
         len_sector = int(self._qttyLevels / len(Sector))
-        min_level = int(i * len_sector)
+        min_level = int(index * len_sector)
         return list(range(min_level, min_level + len_sector))
+
+    @property
+    def weight(self):
+        return self._totalWeight
+
+    @property
+    def id(self):
+        return self.__id
