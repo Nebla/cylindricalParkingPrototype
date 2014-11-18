@@ -9,6 +9,9 @@ esta clase alarma es para reordenar los autos o sacarlos, el mensaje pone la ala
 '''
 # this is the margin time to deliver the car, in seconds
 Margin_time = 9000
+Id_input = 1
+Id_output = 2
+
 
 class Alarm(Enum):
     deliver = 0

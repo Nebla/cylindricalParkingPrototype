@@ -3,8 +3,8 @@ __author__ = 'adrian'
 import sys
 from PyQt4 import QtGui
 
-from UI.CylinderUI import CylinderUI
-from UI.CarFormUI import CarFormUI
+from parking_app.UI.CylinderUI import CylinderUI
+from parking_app.UI.CarFormUI import CarFormUI
 
 class ParkingUI(QtGui.QMainWindow):
 
@@ -81,10 +81,10 @@ class ParkingUI(QtGui.QMainWindow):
 
     def createCustomAlarm(self):
         # Show that the slot has been called.
-        print "Generating a custom error"
+        print("Generating a custom error")
 
     def addNewCar(self):
-        print "Show pop up to add new car"
+        print("Show pop up to add new car")
         self.carForm = CarFormUI()
         self.carForm.resize(400, 200)
         self.carForm.move(50,50)
