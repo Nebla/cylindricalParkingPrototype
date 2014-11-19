@@ -2,20 +2,27 @@ __author__ = 'fsoler'
 import parking_app.Common as Common
 import sys
 
+
 class RoboticDispatcher():
     def __init__(self, qtty_cylinders):
-        self.__sh_buff = [self.SharedBuffer(cyl_id, Common.Id_input) for cyl_id in len(qtty_cylinders)]
-        self.__cylinders = [self.SharedCylinder(cyl_id) for cyl_id in len(qtty_cylinders)]
+        self.__qtty_cylinders = qtty_cylinders
+        self.__sh_buff = None
+        self.__cylinders = None
 
     def initialize(self):
-        #todo
-        pass
+        self.__sh_buff = [self.SharedBuffer(cyl_id, Common.Id_input)
+                          for cyl_id in len(self.__qtty_cylinders)]
+        self.__cylinders = [self.SharedCylinder(cyl_id)
+                            for cyl_id in len(self.__qtty_cylinders)]
 
     def obtainCar(self):
         #TODO
         return True
 
-    def buffers_occupied(self):
+    def buffers_are_occupied(self):
+        buffers = [self.__sh_buff[cyl_id].buffer
+                   for cyl_id in len(self.__qtty_cylinders)]
+        #todo
         pass
 
     def sleep(self):
@@ -27,13 +34,15 @@ class RoboticDispatcher():
         pass
 
     def save_car(self, car_and_hours, cyl_id):
-        self.__sh_buff[cyl_id].buffer = car_and_hours
+        buffer = self.__sh_buff[cyl_id].buffer
+        buffer = car_and_hours
+        self.__sh_buff[cyl_id].buffer = buffer
 
     def run(self):
         while True:
             # falta que chequee por cylinders llenos
             car_and_hours = self.obtainCar()
-            if self.buffers_occupied():
+            if self.buffers_are_occupied():
                 self.sleep()
             cylinders = self.get_available_buffers()
             weights = [cyl.weight for cyl in cylinders]

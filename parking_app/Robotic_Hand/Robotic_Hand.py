@@ -36,7 +36,7 @@ class RoboticHand():
     def deliver_car(self, car):
         if self.__sh_buff_output.buffer is None:
             self.__sh_buff_output.buffer = car
-        #todo if is occupied, this processor must wait till is empty
+        #todo if is occupied, this processor must wait till is empty unless i use a queue
 
     def car_to_save(self):
         return self.__sh_buff_input.buffer is not None
