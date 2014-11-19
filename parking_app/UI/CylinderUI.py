@@ -23,6 +23,7 @@ class CylinderUI(QtGui.QWidget):
             grid.addWidget(slot, *position)
 
 
+
         #self.resize(300, 300)
         #self.setAutoFillBackground(True)
         #p = self.palette()
