@@ -1,23 +1,28 @@
 __author__ = 'fsoler'
 import parking_app.Common as Common
+import sys
 
 class RoboticDispatcher():
     def __init__(self, qtty_cylinders):
         self.__sh_buff = [self.SharedBuffer(cyl_id, Common.Id_input) for cyl_id in len(qtty_cylinders)]
+        self.__cylinders = [self.SharedCylinder(cyl_id) for cyl_id in len(qtty_cylinders)]
+
+    def initialize(self):
+        #todo
+        pass
 
     def obtainCar(self):
         #TODO
         return True
 
     def buffers_occupied(self):
-        #todo
         pass
 
     def sleep(self):
         #todo
         pass
 
-    def get_available_cylinders(self):
+    def get_available_buffers(self):
         #todo
         pass
 
@@ -26,10 +31,11 @@ class RoboticDispatcher():
 
     def run(self):
         while True:
+            # falta que chequee por cylinders llenos
             car_and_hours = self.obtainCar()
             if self.buffers_occupied():
                 self.sleep()
-            cylinders = self.get_available_cylinders()
+            cylinders = self.get_available_buffers()
             weights = [cyl.weight for cyl in cylinders]
             cyl_id = cylinders[weights.index(min(weights))].id
             self.save_car(car_and_hours, cyl_id)
@@ -52,7 +58,23 @@ class RoboticDispatcher():
             self.__buffer = cylinder
             # here i must release the shared memory
 
+    class SharedCylinder():
+        def __init__(self, cylinder_id):
+            self.__cylinder = Common.Cylinder(cylinder_id)
+
+        @property
+        def cylinder(self):
+            #here i must block the shared memory
+            return self.__cylinder
+
+        @cylinder.setter
+        def cylinder(self, cylinder):
+            #todo
+            self.__cylinder = cylinder
+            # here i must release the shared memory
+
+
 if __name__ == "__init__":
-    dispatcher_controller = RoboticDispatcher()
+    dispatcher_controller = RoboticDispatcher(sys.argv[1])
     dispatcher_controller.initialize()
     dispatcher_controller.run()

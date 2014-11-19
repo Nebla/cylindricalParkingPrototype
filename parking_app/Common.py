@@ -105,8 +105,8 @@ class Platform():
 
 
 class Cylinder():
-    def __init__(self, id, levels=6, columns=3):
-        self.__id = id
+    def __init__(self, cylinder_id, levels=6, columns=3):
+        self.__id = cylinder_id
         self.__platforms = [[Platform(lvl, column) for column in range(columns)] for lvl in range(levels)]
         self._qttyLevels = levels
         self._qttyColumns = columns
@@ -144,6 +144,9 @@ class Cylinder():
             [temp_platforms[lvl].pop(col) for lvl in level_range]
 
         return None
+
+    def get_remaining_time(self, level, column):
+        return self.__platforms[level][column].get_remaining_time()
 
     def get_car(self, level, column):
         self._qttyOccupied -= 1
