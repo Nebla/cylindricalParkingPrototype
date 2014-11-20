@@ -1,5 +1,7 @@
 __author__ = 'fsoler'
 import parking_app.Common as Common
+import parking_app.concurrent.SharedBuffer as ShBuff
+import parking_app.concurrent.SharedCylinder as ShCyl
 import sys
 
 
@@ -10,28 +12,48 @@ class RoboticDispatcher():
         self.__cylinders = None
 
     def initialize(self):
-        self.__sh_buff = [self.SharedBuffer(cyl_id, Common.Id_input)
+        self.__sh_buff = [ShBuff.SharedBuffer(cyl_id, Common.Id_input)
                           for cyl_id in len(self.__qtty_cylinders)]
-        self.__cylinders = [self.SharedCylinder(cyl_id)
+        self.__cylinders = [ShCyl.SharedCylinder(cyl_id)
                             for cyl_id in len(self.__qtty_cylinders)]
 
     def obtainCar(self):
         #TODO
         return True
 
-    def buffers_are_occupied(self):
-        buffers = [self.__sh_buff[cyl_id].buffer
-                   for cyl_id in len(self.__qtty_cylinders)]
-        #todo
-        pass
+    def get_available_cylinders(self):
+        ran_cyl = range(self.__qtty_cylinders)
+        cylinders = [self.__cylinders[i].cylinder for i in ran_cyl]
+
+        #for i in ran_cyl:
+        #    self.__cylinders[i].cylinder = cylinders[i]
+
+        return [cylinders[i] for i in ran_cyl if cylinders[i].has_space()]
+        #return [i for i in ran_cyl if cylinders[i].has_space()]
+
+    def buffers_are_occupied(self, available_cyl=None):
+        buffers = self.__get_buffers(available_cyl)
+        return False if [i for i in range(len(buffers))
+                         if buffers[i] is None] else True
 
     def sleep(self):
         #todo
         pass
 
-    def get_available_buffers(self):
-        #todo
-        pass
+    def get_available_buffers(self, available_cyl=None):
+        buffers = self.__get_buffers(available_cyl)
+        return [buffers[i] for i in range(len(buffers))
+                if buffers[i] is not None]
+
+    def __get_buffers(self, available_cyl=None):
+        cylinders = range(self.__qtty_cylinders) if available_cyl is None \
+            else available_cyl
+
+        buffers = [self.__sh_buff[cyl_id].buffer for cyl_id in cylinders]
+
+        for cyl_id in cylinders:
+            self.__sh_buff[cyl_id].buffer = buffers[cyl_id]
+        return buffers
 
     def save_car(self, car_and_hours, cyl_id):
         buffer = self.__sh_buff[cyl_id].buffer
@@ -40,48 +62,17 @@ class RoboticDispatcher():
 
     def run(self):
         while True:
-            # falta que chequee por cylinders llenos
             car_and_hours = self.obtainCar()
-            if self.buffers_are_occupied():
+
+            available_cylinders = self.get_available_cylinders()
+            while self.buffers_are_occupied(available_cylinders):
                 self.sleep()
-            cylinders = self.get_available_buffers()
-            weights = [cyl.weight for cyl in cylinders]
-            cyl_id = cylinders[weights.index(min(weights))].id
+                available_cylinders = self.get_available_cylinders()
+
+            #cylinders = self.get_available_cylinders()
+            weights = [cyl.weight for cyl in available_cylinders]
+            cyl_id = available_cylinders[weights.index(min(weights))].id
             self.save_car(car_and_hours, cyl_id)
-
-    class SharedBuffer():
-
-        def __init__(self, cylinder_id, buffer_id):
-            #todo
-            self.__buffer = None
-
-        @property
-        def buffer(self):
-            #here i must block the shared memory
-            #todo
-            return self.__buffer
-
-        @buffer.setter
-        def buffer(self, cylinder):
-            #todo
-            self.__buffer = cylinder
-            # here i must release the shared memory
-
-    class SharedCylinder():
-        def __init__(self, cylinder_id):
-            self.__cylinder = Common.Cylinder(cylinder_id)
-
-        @property
-        def cylinder(self):
-            #here i must block the shared memory
-            return self.__cylinder
-
-        @cylinder.setter
-        def cylinder(self, cylinder):
-            #todo
-            self.__cylinder = cylinder
-            # here i must release the shared memory
-
 
 if __name__ == "__init__":
     dispatcher_controller = RoboticDispatcher(sys.argv[1])

@@ -1,5 +1,9 @@
 __author__ = 'fsoler'
+import sys
 import parking_app.Common as Common
+import parking_app.concurrent.SharedBuffer as ShBuff
+import parking_app.concurrent.SharedCylinder as ShCyl
+import parking_app.concurrent.SharedAlarms as ShAl
 
 
 class RoboticHand():
@@ -13,10 +17,11 @@ class RoboticHand():
         self.__shared_alarms = None
 
     def initialize(self):
-        self.__shared_cylinder = self.SharedCylinder(self._id)
-        self.__sh_buff_input = self.SharedBuffer(self._id, Common.Id_input)
-        self.__sh_buff_output = self.SharedBuffer(self._id, Common.Id_output)
-        self.__shared_alarms = self.SharedAlarms(self._id, self._qtty_levels, self._qtty_columns)
+        self.__shared_cylinder = ShCyl.SharedCylinder(self._id)
+        self.__sh_buff_input = ShBuff.SharedBuffer(self._id, Common.Id_input)
+        # after change this one, because it will be a queue
+        self.__sh_buff_output = ShBuff.SharedBuffer(self._id, Common.Id_output)
+        self.__shared_alarms = ShAl.SharedAlarms(self._id, self._qtty_levels, self._qtty_columns)
 
     def car_to_deliver(self):
         f = lambda x: x == Common.Alarm.deliver
@@ -114,56 +119,10 @@ class RoboticHand():
                 [car, hours] = self.get_car_to_reorder()
                 self.save_car(car, hours)
 
-    class SharedBuffer():
-
-        def __init__(self, cylinder_id, buffer_id):
-            #todo
-            self.__buffer = None
-
-        @property
-        def buffer(self):
-            #here i must block the shared memory
-            #todo
-            return self.__buffer
-
-        @buffer.setter
-        def buffer(self, cylinder):
-            #todo
-            self.__buffer = cylinder
-            # here i must release the shared memory
-
-    class SharedAlarms():
-        def __init__(self, cylinder_id, qtty_levels, qtty_columns):
-            self.__cylinder_id = cylinder_id
-            self.__alarms = [[None for _ in range(qtty_columns)] for _ in range(qtty_levels)]
-
-        @property
-        def alarms(self):
-            #here i must block the shared memory
-            return self.__alarms
-
-        @alarms.setter
-        def alarms(self, alarms):
-            #todo
-            self.__alarms = alarms
-            # here i must release the shared memory
-
-    class SharedCylinder():
-        def __init__(self, cylinder_id):
-            self.__cylinder = Common.Cylinder(cylinder_id)
-
-        @property
-        def cylinder(self):
-            #here i must block the shared memory
-            return self.__cylinder
-
-        @cylinder.setter
-        def cylinder(self, cylinder):
-            #todo
-            self.__cylinder = cylinder
-            # here i must release the shared memory
-
 if __name__ == "__init__":
-    hand_controller = RoboticHand()
+    hand_id = sys.argv[1]
+    total_levels = sys.argv[2]
+    total_columns = sys.argv[3]
+    hand_controller = RoboticHand(hand_id, total_levels, total_columns)
     hand_controller.initialize()
     hand_controller.run()
