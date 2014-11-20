@@ -6,6 +6,7 @@ import sys
 
 
 class RoboticDispatcher():
+
     def __init__(self, qtty_cylinders):
         self.__qtty_cylinders = qtty_cylinders
         self.__sh_buff = None
