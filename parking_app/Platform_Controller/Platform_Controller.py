@@ -13,22 +13,21 @@ class PlatformController():
         self.__cylinders = None
         self.__alarms = None
 
-    def initialize(self, levels, columns):
+    def initialize(self, level, cols):
         self.__cylinders = [ShCyl.SharedCylinder(cyl_id)
                             for cyl_id in len(self.__qtty_cylinders)]
-        self.__alarms = [ShAl.SharedAlarms(cyl_id, levels, columns)
+        self.__alarms = [ShAl.SharedAlarms(cyl_id, level, cols)
                          for cyl_id in len(self.__qtty_cylinders)]
-
 
     def get_cylinders_id(self):
         return range(self.__qtty_cylinders)
 
     def get_used_platforms(self, cylinder_id):
         self.__temporal_cylinder = self.__cylinders[cylinder_id].cylinder
-        levels = range(self.__temporal_cylinder.qtty_levels)
-        columns = range(self.__temporal_cylinder.qtty_columns)
+        range_levels = range(self.__temporal_cylinder.qtty_levels)
+        range_columns = range(self.__temporal_cylinder.qtty_columns)
         platforms = self.__temporal_cylinder.platforms
-        return [platforms[lvl][col] for lvl in levels for col in columns
+        return [platforms[lvl][col] for lvl in range_levels for col in range_columns
                 if platforms[lvl][col] is not None]
 
     def set_alarm(self, cylinder, alarm, level, column):
