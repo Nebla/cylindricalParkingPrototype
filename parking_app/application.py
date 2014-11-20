@@ -10,7 +10,6 @@ class ParkingUI(QtGui.QMainWindow):
 
     def __init__(self):
         super(ParkingUI, self).__init__()
-
         self.initUI()
 
     def initUI(self):
@@ -47,32 +46,54 @@ class ParkingUI(QtGui.QMainWindow):
         self.show()
 
     def createMenu(self):
+        fileMenu = self.menuBar().addMenu('&File')
+
         exitAction = QtGui.QAction(QtGui.QIcon('Exit.png'), '&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(QtGui.qApp.quit)
 
-        self.menuBar().addMenu('&File').addAction(exitAction)
+        fileMenu.addAction(exitAction)
+
+        simulateMenu = self.menuBar().addMenu('&Simulate')
+
+        alarmAction = QtGui.QAction(QtGui.QIcon('Warning.png'), 'Alarma Aleatoria', self)
+        alarmAction.triggered.connect(self.createCustomAlarm);
+
+        newCarAction= QtGui.QAction(QtGui.QIcon('Logo.png'), 'Estacionar Vehiculo', self)
+        newCarAction.triggered.connect(self.addNewCar);
+
+        withdrawCarAction= QtGui.QAction(QtGui.QIcon('Car.png'), 'Retirar Vehiculo', self)
+        withdrawCarAction.triggered.connect(self.withdrawCar);
+
+        simulateMenu.addAction(alarmAction)
+        simulateMenu.addAction(newCarAction)
+        simulateMenu.addAction(withdrawCarAction)
 
     def createToolbar(self):
-        exitAction = QtGui.QAction(QtGui.QIcon('Exit.png'), 'Exit', self)
+
+        exitAction = QtGui.QAction(QtGui.QIcon('Exit.png'), 'Salir', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(QtGui.qApp.quit)
 
-        alarmAction = QtGui.QAction(QtGui.QIcon('Warning.png'), 'Random Error', self)
-        alarmAction.triggered.connect(self.createCustomAlarm);
+        alarmAction = QtGui.QAction(QtGui.QIcon('Warning.png'), 'Alarma Aleatoria', self)
+        alarmAction.triggered.connect(self.createCustomAlarm)
 
-        newCarAction= QtGui.QAction(QtGui.QIcon('Car.png'), 'Park Car', self)
-        newCarAction.triggered.connect(self.addNewCar);
+        newCarAction= QtGui.QAction(QtGui.QIcon('Logo.png'), 'Estacionar Vehiculo', self)
+        newCarAction.triggered.connect(self.addNewCar)
 
-        self.toolbar = self.addToolBar('Exit')
-        self.toolbar.addAction(exitAction)
-        self.toolbar.addAction(alarmAction)
-        self.toolbar.addAction(newCarAction)
+        withdrawCarAction= QtGui.QAction(QtGui.QIcon('Car.png'), 'Retirar Vehiculo', self)
+        withdrawCarAction.triggered.connect(self.withdrawCar);
 
+        exitToolbar = self.addToolBar('Exit')
+        exitToolbar.addAction(exitAction)
+
+        simulateToolbar = self.addToolBar('Simulate')
+        simulateToolbar.addAction(alarmAction)
+        simulateToolbar.addAction(newCarAction)
+        simulateToolbar.addAction(withdrawCarAction)
 
     def center(self):
-
         qr = self.frameGeometry()
         cp = QtGui.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
@@ -81,18 +102,21 @@ class ParkingUI(QtGui.QMainWindow):
 
     def createCustomAlarm(self):
         # Show that the slot has been called.
-        print("Generating a custom error")
+        print("Creando un error aleatorio")
 
     def addNewCar(self):
-        print("Show pop up to add new car")
+        print("Muestra pop up para agregar un nuevo auto")
         self.carForm = CarFormUI()
         self.carForm.resize(400, 200)
         self.carForm.move(50,50)
         self.carForm.show()
 
-def main():
+    def withdrawCar(self):
+        print("Muestra pop up para retirar un auto")
 
+def main():
     app = QtGui.QApplication(sys.argv)
+
     parkingUI = ParkingUI()
     sys.exit(app.exec_())
 

@@ -1,13 +1,15 @@
 __author__ = 'adrian'
 
 from PyQt4 import QtGui
-from UI.SlotUI import SlotUI
+from UI.PlatformUI import PlatformUI
+
+import parking_app.Common as Common
 
 class CylinderUI(QtGui.QWidget):
 
     def __init__(self):
         super(CylinderUI, self).__init__()
-
+        self.cylinder = Common.Cylinder()
         self.initUI()
 
     def initUI(self):
@@ -19,8 +21,8 @@ class CylinderUI(QtGui.QWidget):
         positions = [(i,j) for i in range(6) for j in range(3)]
 
         for position in positions:
-            slot = SlotUI()
-            grid.addWidget(slot, *position)
+            platformUI = PlatformUI(self.cylinder.__platforms[position(i)][position(j)])
+            grid.addWidget(platformUI, *position)
 
 
 
@@ -29,28 +31,3 @@ class CylinderUI(QtGui.QWidget):
         #p = self.palette()
         #p.setColor(self.backgroundRole(), QtGui.QColor(200, 0, 0))
         #self.setPalette(p)
-
-
-"""
-    def paintEvent(self, e):
-
-        qp = QtGui.QPainter()
-        qp.begin(self)
-        self.drawRectangles(qp)
-        qp.end()
-
-    def drawRectangles(self, qp):
-
-        color = QtGui.QColor(0, 0, 0)
-        color.setNamedColor('#d4d4d4')
-        qp.setPen(color)
-
-        qp.setBrush(QtGui.QColor(200, 0, 0))
-        qp.drawRect(10, 15, 90, 60)
-
-        qp.setBrush(QtGui.QColor(255, 80, 0, 160))
-        qp.drawRect(130, 15, 90, 60)
-
-        qp.setBrush(QtGui.QColor(25, 0, 90, 200))
-        qp.drawRect(250, 15, 90, 60)
-"""

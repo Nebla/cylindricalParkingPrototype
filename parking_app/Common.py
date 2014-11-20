@@ -19,7 +19,6 @@ class Alarm(Enum):
     twoLevelDown = 2
     lessThanMarginTime = 3
 
-
 class Weights(Enum):
     empty = 0
     veryLight = 300

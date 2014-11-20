@@ -5,17 +5,18 @@ from PyQt4 import QtCore
 
 import random
 
-class AlarmConfirmationUI(QtGui.QWidget):
+class WarningConfirmationUI(QtGui.QWidget):
 
     stopAlarm = QtCore.pyqtSignal()
 
-    def __init__(self):
-        super(AlarmConfirmationUI, self).__init__()
+    def __init__(self,parent=None):
+        super(WarningConfirmationUI, self).__init__(parent)
         self.initUI()
 
     def initUI(self):
 
         self.setWindowTitle('Alarm')
+        self.setWindowIcon(QtGui.QIcon('Logo.png'))
 
         verticalLayout = QtGui.QVBoxLayout()
 
