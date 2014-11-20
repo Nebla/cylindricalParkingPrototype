@@ -116,7 +116,9 @@ class ParkingUI(QtGui.QMainWindow):
 
 def main():
     app = QtGui.QApplication(sys.argv)
-
+    levels = 6
+    columns = 3
+    qtty_cylinders = 4
     parkingUI = ParkingUI()
     sys.exit(app.exec_())
 

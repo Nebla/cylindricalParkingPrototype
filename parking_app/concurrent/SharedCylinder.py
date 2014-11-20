@@ -4,9 +4,11 @@ import parking_app.Common as Common
 
 class SharedCylinder():
 
-    def __init__(self, cylinder_id):
-        self.__cylinder = Common.Cylinder(cylinder_id)
+    def __init__(self):
+        self.__cylinder
 
+    def initialize(self, cylinder_id, levels, columns):
+        self.__cylinder = Common.Cylinder(cylinder_id, levels, columns)
     @property
     def cylinder(self):
         #here i must block the shared memory

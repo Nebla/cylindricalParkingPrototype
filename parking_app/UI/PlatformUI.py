@@ -3,7 +3,7 @@ __author__ = 'adrian'
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 
-from WarningConfirmationUI import WarningConfirmationUI
+from parking_app.UI.WarningConfirmationUI import WarningConfirmationUI
 
 import parking_app.Common as Common
 
@@ -22,20 +22,20 @@ class PlatformUI(QtGui.QWidget):
 
         color = QtGui.QColor(150, 150, 150)
 
-        if (self.platform.__vehicle._weight != Common.Weights.empty):
+        if not self.platform.is_empty():
             color = QtGui.QColor(100, 100, 255)
 
             vertical = QtGui.QVBoxLayout()
             horizontal = QtGui.QHBoxLayout()
 
             # Vehicle ID
-            lbl1 = QtGui.QLabel(self.platform.__vehicle._patent,self)
+            lbl1 = QtGui.QLabel(self.platform.vehicle.patent,self)
             #vertical.addWidget(lbl1)
 
             horizontal.addWidget(lbl1)
 
             # Alarm
-            self.warningButton = QtGui.QPushButton();
+            self.warningButton = QtGui.QPushButton()
             self.warningButton.setIcon(QtGui.QIcon('Warning.png'))
             self.warningButton.setIconSize(QtCore.QSize(15,15))
             self.warningButton.clicked.connect(self.showAlarmOffConfirmation)
@@ -46,13 +46,13 @@ class PlatformUI(QtGui.QWidget):
 
             # Current vehicle
             vehicleName = ''
-            if self.platform.__vehicle._weight == Common.Weights.veryLight:
+            if self.platform.get_weight() == Common.Weights.veryLight:
                 vehicleName = 'MotoSide.png'
-            elif self.platform.__vehicle._weight == Common.Weights.light:
+            elif self.platform.get_weight() == Common.Weights.light:
                 vehicleName = 'CarSide.png'
-            elif self.platform.__vehicle._weight == Common.Weights.heavy:
+            elif self.platform.get_weight() == Common.Weights.heavy:
                 vehicleName = '.png'
-            elif self.platform.__vehicle._weight == Common.Weights.veryHeavy:
+            elif self.platform.get_weight() == Common.Weights.veryHeavy:
                 vehicleName = 'TrukSide.png'
 
 
@@ -76,11 +76,11 @@ class PlatformUI(QtGui.QWidget):
         QtCore.QObject.connect(self.confirmationMessage, QtCore.SIGNAL('stopWarning()'), self.turnOffWarning)
 
         self.confirmationMessage.show()
-        print "Mostrar mensaje de confirmacion"
+        print("Mostrar mensaje de confirmacion")
 
 
     def turnOffWarning(self):
-        print "Apagando warning"
+        print("Apagando warning")
         self.warningButton.setHidden(True)
 
 

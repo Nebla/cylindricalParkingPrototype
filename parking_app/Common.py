@@ -46,6 +46,10 @@ class Vehicle():
     def has_this_patent(self, patent):
         return self._patent == patent
 
+    @property
+    def patent(self):
+        return self._patent
+
 
 class Platform():
     TimeFormat = "%y-%m-%dT%H:%M:%S +0000"
@@ -101,6 +105,10 @@ class Platform():
     @property
     def level(self):
         return self.__level
+
+    @property
+    def vehicle(self):
+        return self.__vehicle
 
 
 class Cylinder():
@@ -187,3 +195,15 @@ class Cylinder():
     @property
     def id(self):
         return self.__id
+
+    @property
+    def qtty_levels(self):
+        return self._qttyLevels
+
+    @property
+    def qtty_columns(self):
+        return self._qttyColumns
+
+    @property
+    def platforms(self):
+        return self.__platforms

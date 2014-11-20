@@ -25,11 +25,10 @@ class RoboticDispatcher():
         ran_cyl = range(self.__qtty_cylinders)
         cylinders = [self.__cylinders[i].cylinder for i in ran_cyl]
 
-        #for i in ran_cyl:
-        #    self.__cylinders[i].cylinder = cylinders[i]
-
-        return [cylinders[i] for i in ran_cyl if cylinders[i].has_space()]
-        #return [i for i in ran_cyl if cylinders[i].has_space()]
+        available_cyl = [cylinders[i] for i in ran_cyl if cylinders[i].has_space()]
+        [cylinders.remove(available_cyl[i]) for i in range(len(available_cyl))]
+        self.__return_cylinders(cylinders)
+        return available_cyl
 
     def buffers_are_occupied(self, available_cyl=None):
         buffers = self.__get_buffers(available_cyl)
@@ -45,6 +44,10 @@ class RoboticDispatcher():
         return [buffers[i] for i in range(len(buffers))
                 if buffers[i] is not None]
 
+    def __return_cylinders(self, cylinders):
+        for i in range(len(cylinders)):
+            self.__cylinders[cylinders[i].id].cylinder = cylinders[i]
+
     def __get_buffers(self, available_cyl=None):
         cylinders = range(self.__qtty_cylinders) if available_cyl is None \
             else available_cyl
@@ -55,10 +58,11 @@ class RoboticDispatcher():
             self.__sh_buff[cyl_id].buffer = buffers[cyl_id]
         return buffers
 
-    def save_car(self, car_and_hours, cyl_id):
-        buffer = self.__sh_buff[cyl_id].buffer
-        buffer = car_and_hours
-        self.__sh_buff[cyl_id].buffer = buffer
+    def save_car(self, car_and_hours, cyl_id, available_cyl=None):
+        if available_cyl is not None:
+            self.__return_cylinders(available_cyl)
+        _ = self.__sh_buff[cyl_id].buffer
+        self.__sh_buff[cyl_id].buffer = car_and_hours
 
     def run(self):
         while True:
@@ -69,10 +73,9 @@ class RoboticDispatcher():
                 self.sleep()
                 available_cylinders = self.get_available_cylinders()
 
-            #cylinders = self.get_available_cylinders()
             weights = [cyl.weight for cyl in available_cylinders]
             cyl_id = available_cylinders[weights.index(min(weights))].id
-            self.save_car(car_and_hours, cyl_id)
+            self.save_car(car_and_hours, cyl_id, available_cylinders)
 
 if __name__ == "__init__":
     dispatcher_controller = RoboticDispatcher(sys.argv[1])

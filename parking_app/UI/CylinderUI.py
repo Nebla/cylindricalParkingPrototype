@@ -1,15 +1,15 @@
 __author__ = 'adrian'
 
 from PyQt4 import QtGui
-from UI.PlatformUI import PlatformUI
+from parking_app.UI.PlatformUI import PlatformUI
 
 import parking_app.Common as Common
 
 class CylinderUI(QtGui.QWidget):
 
-    def __init__(self):
+    def __init__(self, cylinder):
         super(CylinderUI, self).__init__()
-        self.cylinder = Common.Cylinder()
+        self.cylinder = cylinder
         self.initUI()
 
     def initUI(self):
@@ -17,12 +17,12 @@ class CylinderUI(QtGui.QWidget):
         grid = QtGui.QGridLayout()
         self.setLayout(grid)
 
+        positions = [(i, j) for i in range(self.cylinder.qtty_levels) for j in range(self.cylinder.qtty_columns)]
 
-        positions = [(i,j) for i in range(6) for j in range(3)]
-
-        for position in positions:
-            platformUI = PlatformUI(self.cylinder.__platforms[position(i)][position(j)])
-            grid.addWidget(platformUI, *position)
+        platforms = self.cylinder.platforms
+        for [lvl, col] in positions:
+            platformUI = PlatformUI(platforms[lvl][col])
+            grid.addWidget(platformUI, *[lvl, col])
 
 
 
