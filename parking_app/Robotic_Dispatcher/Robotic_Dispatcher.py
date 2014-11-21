@@ -2,6 +2,7 @@ __author__ = 'fsoler'
 import parking_app.Common as Common
 import parking_app.concurrent.SharedBuffer as ShBuff
 import parking_app.concurrent.SharedCylinder as ShCyl
+import parking_app.concurrent.SharedConveyorBelt as ShCon
 import sys
 
 
@@ -11,16 +12,17 @@ class RoboticDispatcher():
         self.__qtty_cylinders = qtty_cylinders
         self.__sh_buff = None
         self.__cylinders = None
+        self.__sh_conveyor = None
 
     def initialize(self):
-        self.__sh_buff = [ShBuff.SharedBuffer(cyl_id, Common.Id_input)
+        self.__sh_buff = [ShBuff.SharedBuffer(cyl_id, Common.Input_id)
                           for cyl_id in len(self.__qtty_cylinders)]
         self.__cylinders = [ShCyl.SharedCylinder(cyl_id)
                             for cyl_id in len(self.__qtty_cylinders)]
+        self.__sh_conveyor = ShCon.SharedConveyorBelt(Common.Conveyor_input_id)
 
-    def obtainCar(self):
-        #TODO
-        return True
+    def obtain_car_and_hours(self):
+        return self.__sh_conveyor.get(Common.Robotic_dispatcher_id)
 
     def get_available_cylinders(self):
         ran_cyl = range(self.__qtty_cylinders)
@@ -67,7 +69,7 @@ class RoboticDispatcher():
 
     def run(self):
         while True:
-            car_and_hours = self.obtainCar()
+            car_and_hours = self.obtain_car_and_hours()
 
             available_cylinders = self.get_available_cylinders()
             while self.buffers_are_occupied(available_cylinders):

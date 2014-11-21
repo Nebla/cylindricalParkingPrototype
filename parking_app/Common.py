@@ -9,8 +9,11 @@ esta clase alarma es para reordenar los autos o sacarlos, el mensaje pone la ala
 '''
 # this is the margin time to deliver the car, in seconds
 Margin_time = 9000
-Id_input = 1
-Id_output = 2
+Input_id = 1
+Conveyor_input_id = 1
+Conveyor_output_id = 2
+Robotic_dispatcher_id = 3
+Robotic_deliverer_id = 4
 
 
 class Alarm(Enum):
@@ -18,6 +21,7 @@ class Alarm(Enum):
     oneLevelDown = 1
     twoLevelDown = 2
     lessThanMarginTime = 3
+
 
 class Weights(Enum):
     empty = 0
@@ -32,8 +36,31 @@ class Sector(Enum):
     middle = 12
     high = 9999
 
-    # it would be better add a function that determines the sector from hours
 
+class ParkingSlots():
+    def __init__(self, quantity_slots=10):
+        self.__levels = 2
+        self.__columns = int(quantity_slots/self.__columns)
+        self.__slots = [[None for _ in range(self.__columns)]
+                        for _ in range(self.__levels)]
+
+    def save_car(self, car):
+        free_slots = self.__get_index_free_spaces()
+        if not free_slots:
+            return False
+        [lvl, col] = free_slots[0]
+        self.__slots[lvl][col] = car
+        return True
+
+    def get_car(self, lvl, col):
+        #todo
+        pass
+
+    def __get_index_free_spaces(self):
+        levels = range(self.__levels)
+        columns = range(self.__columns)
+        return [[lvl, col] for lvl in levels for col in columns
+                if self.__slots[lvl][col] is not None]
 
 class Vehicle():
     def __init__(self, patent, weight=Weights['veryLight']):

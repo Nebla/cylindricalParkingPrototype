@@ -2,8 +2,10 @@ __author__ = 'fsoler'
 import sys
 import parking_app.Common as Common
 import parking_app.concurrent.SharedBuffer as ShBuff
+import parking_app.concurrent.SharedConveyorBelt as ShCon
 import parking_app.concurrent.SharedCylinder as ShCyl
 import parking_app.concurrent.SharedAlarms as ShAl
+
 
 
 class RoboticHand():
@@ -13,14 +15,13 @@ class RoboticHand():
         self._qtty_columns = qtty_columns
         self.__shared_cylinder = None
         self.__sh_buff_input = None
-        self.__sh_buff_output = None
+        self.__sh_conveyor = None
         self.__shared_alarms = None
 
     def initialize(self):
         self.__shared_cylinder = ShCyl.SharedCylinder(self._id)
-        self.__sh_buff_input = ShBuff.SharedBuffer(self._id, Common.Id_input)
-        # after change this one, because it will be a queue
-        self.__sh_buff_output = ShBuff.SharedBuffer(self._id, Common.Id_output)
+        self.__sh_buff_input = ShBuff.SharedBuffer(self._id, Common.Input_id)
+        self.__sh_conveyor = ShCon.SharedConveyorBelt(Common.Conveyor_input_id)
         self.__shared_alarms = ShAl.SharedAlarms(self._id, self._qtty_levels, self._qtty_columns)
 
     def car_to_deliver(self):
@@ -39,12 +40,12 @@ class RoboticHand():
         return car
 
     def deliver_car(self, car):
-        if self.__sh_buff_output.buffer is None:
-            self.__sh_buff_output.buffer = car
-        #todo if is occupied, this processor must wait till is empty unless i use a queue
+        self.__sh_conveyor.add(car)
 
     def car_to_save(self):
-        return self.__sh_buff_input.buffer is not None
+        car_and_hours = self.__sh_buff_input.buffer
+        self.__sh_buff_input.buffer = car_and_hours
+        return car_and_hours is not None
 
     def get_car_to_save(self):
         car_and_hour = self.__sh_buff_input.buffer
