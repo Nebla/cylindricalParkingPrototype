@@ -17,21 +17,21 @@ class PlatformController():
     def initialize(self, sh_cyl, mtx_cyl, sh_alarm, mtx_alarms):
         self.__cylinders = [ShHan.SharedHandler(sh_cyl[cyl_id],
                                                 mtx_cyl[cyl_id])
-                            for cyl_id in len(self.__qtty_cylinders)]
+                            for cyl_id in range(self.__qtty_cylinders)]
         self.__alarms = [ShHan.SharedHandler(sh_alarm[cyl_id],
                                              mtx_alarms[cyl_id])
-                         for cyl_id in len(self.__qtty_cylinders)]
+                         for cyl_id in range(self.__qtty_cylinders)]
 
     def get_cylinders_id(self):
         return range(self.__qtty_cylinders)
 
     def get_used_platforms(self, cylinder_id):
-        self.__temporal_cylinder = self.__cylinders[cylinder_id].cylinder
-        range_levels = range(self.__temporal_cylinder.qtty_levels)
-        range_columns = range(self.__temporal_cylinder.qtty_columns)
-        platforms = self.__temporal_cylinder.platforms
+        self.__temporal_cylinder = self.__cylinders[cylinder_id].data
+        range_levels = range(self.__temporal_cylinder.qtty_levels())
+        range_columns = range(self.__temporal_cylinder.qtty_columns())
+        platforms = self.__temporal_cylinder.platforms()
         return [platforms[lvl][col] for lvl in range_levels for col in range_columns
-                if platforms[lvl][col] is not None]
+                if not platforms[lvl][col].is_empty()]
 
     def set_alarm(self, cylinder, alarm, level, column):
         alarms = self.__alarms[cylinder].alarms
@@ -55,7 +55,7 @@ class PlatformController():
         for i in range(len(positions)):
             self.__temporal_cylinder.platforms[positions[i][0]][positions[i][1]] = platforms[i]
 
-        self.__cylinders[cylinder_id].cylinder = self.__temporal_cylinder
+        self.__cylinders[cylinder_id].data = self.__temporal_cylinder
 
     def sleep_one_minute(self):
         time.sleep(self.Minute)
@@ -65,8 +65,8 @@ class PlatformController():
             for cyl_id in self.get_cylinders_id():
                 platforms = self.get_used_platforms(cyl_id)
                 for platform in platforms:
-                    level = platform.level
-                    column = platform.column
+                    level = platform.level()
+                    column = platform.column()
                     sector = self.get_sector_from_level(level)
                     remaining_time = platform.get_remaining_time()
 
@@ -86,6 +86,7 @@ class PlatformController():
                 self.return_used_platforms(cyl_id, platforms)
             self.sleep_one_minute()
 
+"""
 if __name__ == "__init__":
     qtty_cyl = sys.argv[1]
     levels = sys.argv[2]
@@ -98,3 +99,4 @@ if __name__ == "__init__":
     platform_controller.initialize(sh_cylinders, mutex_cyl, sh_alarms,
                                    mutex_alarms)
     platform_controller.run()
+"""

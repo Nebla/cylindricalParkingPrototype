@@ -128,13 +128,18 @@ class Platform():
     def is_empty(self):
         return not self.__isOccupied
 
-    @property
     def level(self):
-        return self.__level
+        level = self.__level
+        return level
 
-    @property
+    def column(self):
+        column = self.__column
+        return column
+
+
     def vehicle(self):
-        return self.__vehicle
+        vehicle = self.__vehicle
+        return vehicle
 
 
 class Cylinder():
@@ -176,7 +181,7 @@ class Cylinder():
             col_weights.pop(col)
             [temp_platforms[lvl].pop(col) for lvl in level_range]
 
-        return None
+        return [None, None]
 
     def get_remaining_time(self, level, column):
         return self.__platforms[level][column].get_remaining_time()
@@ -214,22 +219,22 @@ class Cylinder():
         min_level = int(index * len_sector)
         return list(range(min_level, min_level + len_sector))
 
-    @property
     def weight(self):
-        return self._totalWeight
+        weight = self._totalWeight
+        return weight
 
-    @property
     def id(self):
-        return self.__id
+        my_id = self.__id
+        return my_id
 
-    @property
     def qtty_levels(self):
-        return self._qttyLevels
+        levels = self._qttyLevels
+        return levels
 
-    @property
     def qtty_columns(self):
-        return self._qttyColumns
+        columns = self._qttyColumns
+        return columns
 
-    @property
     def platforms(self):
-        return self.__platforms
+        platforms = self.__platforms
+        return platforms

@@ -10,16 +10,15 @@ class CylinderUI(QtGui.QWidget):
     def __init__(self, cylinder):
         super(CylinderUI, self).__init__()
         self.cylinder = cylinder
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
 
         grid = QtGui.QGridLayout()
         self.setLayout(grid)
 
-        positions = [(i, j) for i in range(self.cylinder.qtty_levels) for j in range(self.cylinder.qtty_columns)]
-
-        platforms = self.cylinder.platforms
+        positions = [(i, j) for i in range(self.cylinder.qtty_levels()) for j in range(self.cylinder.qtty_columns())]
+        platforms = self.cylinder.platforms()
         for [lvl, col] in positions:
             platformUI = PlatformUI(platforms[lvl][col])
             grid.addWidget(platformUI, *[lvl, col])

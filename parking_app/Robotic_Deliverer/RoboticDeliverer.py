@@ -33,6 +33,7 @@ class RoboticDeliverer():
                 self.wait_for_place_into_garage()
                 self.place_car_into_garage(car)
 
+"""
 if __name__ == "__init__":
     input_queue = sys.argv[1]
     parking_slot = sys.argv[2]
@@ -42,3 +43,4 @@ if __name__ == "__init__":
     robotic_deliverer_controller.initialize(input_queue, parking_slot,
                                             mutex_parking_slot)
     robotic_deliverer_controller.run()
+"""

@@ -1,5 +1,5 @@
 __author__ = 'fsoler'
-import sys
+import time
 import parking_app.Common as Common
 import parking_app.concurrent.SharedHandler as ShHan
 
@@ -40,20 +40,20 @@ class RoboticHand():
         self.__sh_conveyor.add(car)
 
     def car_to_save(self):
-        car_and_hours = self.__sh_buff_input.buffer
-        self.__sh_buff_input.buffer = car_and_hours
-        return car_and_hours is not None
+        car_and_hours = self.__sh_buff_input.data
+        self.__sh_buff_input.data = car_and_hours
+        return car_and_hours[0] is not None
 
     def get_car_to_save(self):
-        car_and_hour = self.__sh_buff_input.buffer
-        self.__sh_buff_input.buffer = None
+        car_and_hour = self.__sh_buff_input.data
+        self.__sh_buff_input.data = [None, None]
         return car_and_hour
 
     def save_car(self, car, hours):
-        cylinder = self.__shared_cylinder.cylinder
+        cylinder = self.__shared_cylinder.data
         [lvl, col] = cylinder.get_position_to_save_car(hours)
         cylinder.add_car(car, lvl, col, hours)
-        self.__shared_cylinder.cylinder = cylinder
+        self.__shared_cylinder.data = cylinder
 
     def get_car_to_reorder(self):
         f = lambda x: x == Common.Alarm.oneLevelDown or Common.Alarm.twoLevelDown
@@ -62,13 +62,13 @@ class RoboticHand():
         [level, column] = platforms_to_reorder[0]
         car = self.__get_car_from_platform(level, column)
 
-        cylinder = self.__shared_cylinder.cylinder
+        cylinder = self.__shared_cylinder.data
         hours = cylinder.get_remaining_time(level, column)
-        self.__shared_cylinder.cylinder = cylinder
+        self.__shared_cylinder.data = cylinder
         return [car, hours]
 
     def car_to_reorder(self):
-        f = lambda x: x == Common.Alarm.oneLevelDown or Common.Alarm.twoLevelDown
+        f = lambda x: x == Common.Alarm.oneLevelDown or x == Common.Alarm.twoLevelDown
         return self.__car_to_alarm(f)
 
     def little_time_to_deliver(self):
@@ -76,33 +76,34 @@ class RoboticHand():
         return self.__car_to_alarm(f)
 
     def __car_to_alarm(self, f):
-        alarms = self.__shared_alarms.alarms
+        alarms = self.__shared_alarms.data
 
         for lvl in range(self._qtty_levels):
             if [col for col in range(self._qtty_columns) if f(alarms[lvl][col])]:
-                self.__shared_alarms.alarms = alarms
+                self.__shared_alarms.data = alarms
                 return True
 
-        self.__shared_alarms.alarms = alarms
+        self.__shared_alarms.data = alarms
         return False
 
     def __get_car_from_platform(self, lvl, col):
-        cylinder = self.__shared_cylinder.cylinder
+        cylinder = self.__shared_cylinder.data
         car = cylinder.get_car(lvl, col)
-        self.__shared_cylinder.cylinder = cylinder
+        self.__shared_cylinder.data = cylinder
         return car
 
     def __get_platforms(self, f):
-        alarms = self.__shared_alarms.alarms
+        alarms = self.__shared_alarms.data
 
         platforms = [[lvl, col] for lvl in range(self._qtty_levels)
                      for col in range(self._qtty_columns)
                      if f(alarms[lvl][col])]
-        self.__shared_alarms.alarms = alarms
+        self.__shared_alarms.data = alarms
         return platforms
 
     def run(self):
         while True:
+            time.sleep(1)
             while self.car_to_deliver():
                 car = self.get_car_to_deliver()
                 self.deliver_car(car)
@@ -117,6 +118,7 @@ class RoboticHand():
                 [car, hours] = self.get_car_to_reorder()
                 self.save_car(car, hours)
 
+"""
 if __name__ == "__init__":
     hand_id = sys.argv[1]
     total_levels = sys.argv[2]
@@ -132,3 +134,4 @@ if __name__ == "__init__":
     hand_controller.initialize(cylinder, mutex_cylinder, buffer, mutex_buffer,
                                alarms, mutex_alarms, queue)
     hand_controller.run()
+"""

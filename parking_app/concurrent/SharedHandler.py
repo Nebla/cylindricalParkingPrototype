@@ -7,11 +7,11 @@ class SharedHandler():
             self.__mutex = mutex_data
 
         @property
-        def alarms(self):
+        def data(self):
             self.__mutex.acquire()
             return self.__sh_data
 
-        @alarms.setter
-        def alarms(self, alarms):
+        @data.setter
+        def data(self, alarms):
             self.__sh_data = alarms
             self.__mutex.release()

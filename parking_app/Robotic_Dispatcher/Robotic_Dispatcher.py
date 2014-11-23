@@ -80,7 +80,10 @@ class RoboticDispatcher():
             cyl_id = available_cylinders[weights.index(min(weights))].id
             self.save_car(car_and_hours, cyl_id, available_cylinders)
 
-if __name__ == "__init__":
+
+"""
+def start(qtty_cylinders, cylinders, mutex_cylinders, deliver_queue, buffers, mutex_buffers):
+
     qtty_cylinders = sys.argv[1]
     cylinders = sys.argv[2]
     mutex_cylinders = sys.argv[3]
@@ -90,5 +93,6 @@ if __name__ == "__init__":
 
     dispatcher_controller = RoboticDispatcher(qtty_cylinders)
     dispatcher_controller.initialize(cylinders, mutex_cylinders,
-                                     deliver_queue, buffers, mutex_buffers)
+                                         deliver_queue, buffers, mutex_buffers)
     dispatcher_controller.run()
+"""

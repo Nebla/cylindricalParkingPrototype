@@ -50,8 +50,9 @@ class ParkingUI(QtGui.QMainWindow):
         for cylinder in self.__cylinders:
             main_layout.addWidget(CylinderUI(cylinder))
 
+        print('1')
         main_layout.addWidget(ParkingSlotsUI(self.__parking_slot))
-
+        print('2')
         # central widget
         central_widget = QtGui.QWidget()
         central_widget.setLayout(main_layout)
@@ -120,9 +121,9 @@ class ParkingUI(QtGui.QMainWindow):
 
     def addNewCar(self):
         print("Muestra pop up para agregar un nuevo auto")
-        car_form = CarFormUI()
+        car_form = CarFormUI(self.parent())
         car_form.resize(400, 200)
-        car_form.move(50,50)
+        car_form.move(150,150)
         car_form.show()
 
     def withdrawCar(self):
@@ -144,7 +145,7 @@ def main():
     app = QtGui.QApplication(sys.argv)
     levels = 6
     columns = 3
-    qtty_cylinders = 4
+    qtty_cylinders = 1
     qtty_slots = 10
 
     cylinders = []
@@ -161,7 +162,7 @@ def main():
     deliver_queue = Queue()
 
     mutex_cylinders = [Lock() for _ in range(qtty_cylinders)]
-    mutex_alarms = [[Lock() for _ in range(columns)] for _ in range(levels)]
+    mutex_alarms = [Lock() for _ in range(qtty_cylinders)]
     mutex_buffers = [Lock() for _ in range(qtty_cylinders)]
     mutex_parking_slot = Lock()
 
@@ -171,25 +172,33 @@ def main():
     sh_alarms = [Manager().list(alarms) for _ in range(qtty_cylinders)]
     sh_buffers = [Manager().list(car_and_hours) for _ in range(qtty_cylinders)]
 
+
+    """
     processes = []
-    processes.append(Process(target=Platform_Controller, args=(
+
+    processes.append(Process(target=Platform_Controller.start, args=(
         qtty_cylinders, levels, columns, cylinders, mutex_cylinders, sh_alarms, mutex_alarms)))
-    processes.append(Process(target=Robotic_Deliverer, args=(
+
+    processes.append(Process(target=Robotic_Deliverer.start, args=(
         input_queue, parking_slot, mutex_parking_slot)))
-    processes.append(Process(target=Robotic_Dispatcher, args=(
+
+    processes.append(Process(target=Robotic_Dispatcher.start, args=(
         qtty_cylinders, cylinders, mutex_cylinders, deliver_queue, sh_buffers, mutex_buffers)))
 
     for i in range(qtty_cylinders):
-        processes.append(Process(target=Robotic_Hand, args=(
+        processes.append(Process(target=Robotic_Hand.start, args=(
             i, levels, columns, cylinders[i], mutex_cylinders[i], sh_buffers[i],
             mutex_buffers[i], deliver_queue, sh_alarms[i], mutex_alarms[i])))
 
     [process.start() for process in processes]
+    """
 
     parkingUI = ParkingUI(cylinders, parking_slot, input_queue)
 
-    for p in processes:
-        p.join()
+    #for p in processes:
+    #    p.join()
+
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':

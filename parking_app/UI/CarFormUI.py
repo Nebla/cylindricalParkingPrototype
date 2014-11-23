@@ -1,14 +1,13 @@
 __author__ = 'adrian'
 
 from PyQt4 import QtGui
-from PyQt4 import QtCore
-
-import random
+import parking_app.Common as Common
 
 class CarFormUI(QtGui.QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent = None):
         super(CarFormUI, self).__init__(parent)
+
         self.initUI()
 
     def initUI(self):
@@ -56,11 +55,11 @@ class CarFormUI(QtGui.QWidget):
         hoursLayout.addLayout(optionsLayout)
 
         #Tipo de vehiculo
-        vehicle = QtGui.QComboBox()
-        vehicle.addItem('Moto')
-        vehicle.addItem('Auto')
-        vehicle.addItem('Camioneta')
-        vehicle.addItem('Utilitario')
+        self.__vehicle = QtGui.QComboBox()
+        self.__vehicle.addItem('Moto')
+        self.__vehicle.addItem('Auto')
+        self.__vehicle.addItem('Camioneta')
+        self.__vehicle.addItem('Utilitario')
 
         # Boton de aceptar y cancelar
         buttonLayout = QtGui.QHBoxLayout()
@@ -75,7 +74,7 @@ class CarFormUI(QtGui.QWidget):
         layout = QtGui.QVBoxLayout()
         layout.addLayout(patenteLayout)
         layout.addLayout(hoursLayout)
-        layout.addWidget(vehicle)
+        layout.addWidget(self.__vehicle)
         layout.addLayout(buttonLayout)
         self.setLayout(layout)
 
@@ -85,9 +84,27 @@ class CarFormUI(QtGui.QWidget):
     def estadiaSelected(self):
         self.otroSpinBox.setEnabled(False)
 
+    def getWeight(self):
+        if self.__vehicle.currentIndex() == 0:
+            return Common.Weights.veryLight
+        elif self.__vehicle.currentIndex() == 1:
+            return Common.Weights.light
+        elif self.__vehicle.currentIndex() == 2:
+            return Common.Weights.heavy
+        elif self.__vehicle.currentIndex() == 3:
+            return Common.Weights.veryHeavy
+
     def acept(self):
-        print('Aceptar')
+        print('Aceptar - Enviar los datos al estacionamiento')
         # Enviar los datos al estacionamiento
+        hours = int(self.otroSpinBox.text)
+        if self.estadia.isChecked():
+            hours = 12
+        elif self.mediaEstadia.isChecked():
+            hours = 6
+
+        vehicle = Common.Vehicle(self.patente, self.getWeight())
+        #self.__input_queue([vehicle, hours])
 
     def cancel(self):
         print('Cancelar')
