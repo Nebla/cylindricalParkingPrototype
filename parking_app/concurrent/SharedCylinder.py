@@ -4,19 +4,16 @@ import parking_app.Common as Common
 
 class SharedCylinder():
 
-    def __init__(self, cylinder_id):
-        self.__cylinder = None
-
-    def initialize(self, cylinder_id, levels, columns):
-        self.__cylinder = Common.Cylinder(cylinder_id, levels, columns)
+    def __init__(self, sh_data, mutex):
+        self.__cylinder = sh_data
+        self.__mutex = mutex
 
     @property
     def cylinder(self):
-        #here i must block the shared memory
+        self.__mutex.acquire()
         return self.__cylinder
 
     @cylinder.setter
     def cylinder(self, cylinder):
-        #todo
         self.__cylinder = cylinder
-        # here i must release the shared memory
+        self.__mutex.release()

@@ -1,11 +1,7 @@
 __author__ = 'fsoler'
 import sys
 import parking_app.Common as Common
-import parking_app.concurrent.SharedBuffer as ShBuff
-import parking_app.concurrent.SharedConveyorBelt as ShCon
-import parking_app.concurrent.SharedCylinder as ShCyl
-import parking_app.concurrent.SharedAlarms as ShAl
-
+import parking_app.concurrent.SharedHandler as ShHan
 
 
 class RoboticHand():
@@ -18,11 +14,12 @@ class RoboticHand():
         self.__sh_conveyor = None
         self.__shared_alarms = None
 
-    def initialize(self):
-        self.__shared_cylinder = ShCyl.SharedCylinder(self._id)
-        self.__sh_buff_input = ShBuff.SharedBuffer(self._id, Common.Input_id)
-        self.__sh_conveyor = ShCon.SharedConveyorBelt(Common.Conveyor_input_id)
-        self.__shared_alarms = ShAl.SharedAlarms(self._id, self._qtty_levels, self._qtty_columns)
+    def initialize(self, sh_cylinder, mutex_sh_cylinder, sh_buffer, mutex_sh_buffer,
+                   sh_alarms, mutex_sh_alarms, conveyor):
+        self.__shared_cylinder = ShHan.SharedHandler(sh_cylinder, mutex_sh_cylinder)
+        self.__sh_buff_input = ShHan.SharedHandler(sh_buffer, mutex_sh_buffer)
+        self.__sh_conveyor = conveyor
+        self.__shared_alarms = ShHan.SharedHandler(sh_alarms, mutex_sh_alarms)
 
     def car_to_deliver(self):
         f = lambda x: x == Common.Alarm.deliver
@@ -124,6 +121,14 @@ if __name__ == "__init__":
     hand_id = sys.argv[1]
     total_levels = sys.argv[2]
     total_columns = sys.argv[3]
+    cylinder = sys.argv[4]
+    mutex_cylinder = sys.argv[5]
+    buffer = sys.argv[7]
+    mutex_buffer = sys.argv[6]
+    queue = sys.argv[8]
+    alarms = sys.argv[9]
+    mutex_alarms = sys.argv[10]
     hand_controller = RoboticHand(hand_id, total_levels, total_columns)
-    hand_controller.initialize()
+    hand_controller.initialize(cylinder, mutex_cylinder, buffer, mutex_buffer,
+                               alarms, mutex_alarms, queue)
     hand_controller.run()

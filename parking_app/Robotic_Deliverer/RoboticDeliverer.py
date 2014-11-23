@@ -1,7 +1,6 @@
 __author__ = 'fsoler'
-import parking_app.Common as Common
-import parking_app.concurrent.SharedConveyorBelt as ShCon
-import parking_app.concurrent.SharedParkingSlot as ShPark
+import sys
+import parking_app.concurrent.SharedHandler as ShHan
 
 
 class RoboticDeliverer():
@@ -9,15 +8,13 @@ class RoboticDeliverer():
     def __init__(self):
         self.__sh_conveyor = None
         self.__sh_slots = None
-        #TODO
-        pass
 
-    def initialize(self):
-        self.__sh_conveyor = ShCon.SharedConveyorBelt(Common.Conveyor_input_id)
-        self.__sh_slots = ShPark.SharedParkingSlots()
+    def initialize(self, conveyor, sh_slots, mutex_slots):
+        self.__sh_conveyor = conveyor
+        self.__sh_slots = ShHan.SharedHandler(sh_slots, mutex_slots)
 
     def obtain_car(self):
-        return self.__sh_conveyor.get(Common.Robotic_deliverer_id)
+        return self.__sh_conveyor.get()
 
     def place_car_into_garage(self, car):
         parking_slots = self.__sh_slots.slots
@@ -37,6 +34,11 @@ class RoboticDeliverer():
                 self.place_car_into_garage(car)
 
 if __name__ == "__init__":
-    robitc_deliverer_controller = RoboticDeliverer()
-    robitc_deliverer_controller.initialize()
-    robitc_deliverer_controller.run()
+    input_queue = sys.argv[1]
+    parking_slot = sys.argv[2]
+    mutex_parking_slot = sys.argv[3]
+
+    robotic_deliverer_controller = RoboticDeliverer()
+    robotic_deliverer_controller.initialize(input_queue, parking_slot,
+                                            mutex_parking_slot)
+    robotic_deliverer_controller.run()

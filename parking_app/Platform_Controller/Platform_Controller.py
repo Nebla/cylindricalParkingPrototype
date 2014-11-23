@@ -1,11 +1,12 @@
 __author__ = 'fsoler'
 import sys
+import time
 import parking_app.Common as Common
-import parking_app.concurrent.SharedCylinder as ShCyl
-import parking_app.concurrent.SharedAlarms as ShAl
+import parking_app.concurrent.SharedHandler as ShHan
 
 
 class PlatformController():
+    Minute = 60
 
     def __init__(self, qtty_cylinders):
         self.__qtty_cylinders = qtty_cylinders
@@ -13,10 +14,12 @@ class PlatformController():
         self.__cylinders = None
         self.__alarms = None
 
-    def initialize(self, level, cols):
-        self.__cylinders = [ShCyl.SharedCylinder(cyl_id)
+    def initialize(self, sh_cyl, mtx_cyl, sh_alarm, mtx_alarms):
+        self.__cylinders = [ShHan.SharedHandler(sh_cyl[cyl_id],
+                                                mtx_cyl[cyl_id])
                             for cyl_id in len(self.__qtty_cylinders)]
-        self.__alarms = [ShAl.SharedAlarms(cyl_id, level, cols)
+        self.__alarms = [ShHan.SharedHandler(sh_alarm[cyl_id],
+                                             mtx_alarms[cyl_id])
                          for cyl_id in len(self.__qtty_cylinders)]
 
     def get_cylinders_id(self):
@@ -55,8 +58,7 @@ class PlatformController():
         self.__cylinders[cylinder_id].cylinder = self.__temporal_cylinder
 
     def sleep_one_minute(self):
-        #todo
-        pass
+        time.sleep(self.Minute)
 
     def run(self):
         while True:
@@ -88,6 +90,11 @@ if __name__ == "__init__":
     qtty_cyl = sys.argv[1]
     levels = sys.argv[2]
     columns = sys.argv[3]
+    sh_cylinders = sys.argv[4]
+    mutex_cyl = sys.argv[5]
+    sh_alarms = sys.argv[6]
+    mutex_alarms = sys.argv[7]
     platform_controller = PlatformController(qtty_cyl)
-    platform_controller.initialize(levels, columns)
+    platform_controller.initialize(sh_cylinders, mutex_cyl, sh_alarms,
+                                   mutex_alarms)
     platform_controller.run()

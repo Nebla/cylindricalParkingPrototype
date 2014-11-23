@@ -1,9 +1,11 @@
 __author__ = 'fsoler'
+import sys
+import time
 import parking_app.Common as Common
 import parking_app.concurrent.SharedBuffer as ShBuff
 import parking_app.concurrent.SharedCylinder as ShCyl
 import parking_app.concurrent.SharedConveyorBelt as ShCon
-import sys
+import parking_app.concurrent.SharedHandler as ShHan
 
 
 class RoboticDispatcher():
@@ -14,12 +16,10 @@ class RoboticDispatcher():
         self.__cylinders = None
         self.__sh_conveyor = None
 
-    def initialize(self):
-        self.__sh_buff = [ShBuff.SharedBuffer(cyl_id, Common.Input_id)
-                          for cyl_id in len(self.__qtty_cylinders)]
-        self.__cylinders = [ShCyl.SharedCylinder(cyl_id)
-                            for cyl_id in len(self.__qtty_cylinders)]
-        self.__sh_conveyor = ShCon.SharedConveyorBelt(Common.Conveyor_input_id)
+    def initialize(self, sh_cylinders, mutex_sh_cylinders, conveyor, sh_buffers, mutex_sh_buffers):
+        self.__sh_buff = ShHan.SharedHandler(sh_buffers, mutex_sh_buffers)
+        self.__cylinders = ShHan.SharedHandler(sh_cylinders, mutex_sh_cylinders)
+        self.__sh_conveyor = conveyor
 
     def obtain_car_and_hours(self):
         return self.__sh_conveyor.get(Common.Robotic_dispatcher_id)
@@ -40,7 +40,7 @@ class RoboticDispatcher():
 
     def sleep(self):
         #todo
-        pass
+        time.sleep(10)
 
     def get_available_buffers(self, available_cyl=None):
         buffers = self.__get_buffers(available_cyl)
@@ -81,6 +81,14 @@ class RoboticDispatcher():
             self.save_car(car_and_hours, cyl_id, available_cylinders)
 
 if __name__ == "__init__":
-    dispatcher_controller = RoboticDispatcher(sys.argv[1])
-    dispatcher_controller.initialize()
+    qtty_cylinders = sys.argv[1]
+    cylinders = sys.argv[2]
+    mutex_cylinders = sys.argv[3]
+    deliver_queue = sys.argv[4]
+    buffers = sys.argv[5]
+    mutex_buffers = sys.argv[6]
+
+    dispatcher_controller = RoboticDispatcher(qtty_cylinders)
+    dispatcher_controller.initialize(cylinders, mutex_cylinders,
+                                     deliver_queue, buffers, mutex_buffers)
     dispatcher_controller.run()

@@ -3,7 +3,6 @@ from enum import Enum
 import time
 import calendar
 
-
 '''
 esta clase alarma es para reordenar los autos o sacarlos, el mensaje pone la alarma en deliver
 '''
@@ -40,7 +39,7 @@ class Sector(Enum):
 class ParkingSlots():
     def __init__(self, quantity_slots=10):
         self.__levels = 2
-        self.__columns = int(quantity_slots/self.__columns)
+        self.__columns = int(quantity_slots/self.__levels)
         self.__slots = [[None for _ in range(self.__columns)]
                         for _ in range(self.__levels)]
 
@@ -51,7 +50,7 @@ class ParkingSlots():
         [lvl, col] = free_slots[0]
         self.__slots[lvl][col] = car
         return True
-
+    
     def get_car(self, lvl, col):
         #todo
         pass
