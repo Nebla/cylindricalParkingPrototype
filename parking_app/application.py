@@ -5,6 +5,9 @@ from PyQt4 import QtGui
 
 from parking_app.UI.CylinderUI import CylinderUI
 from parking_app.UI.CarFormUI import CarFormUI
+from parking_app.UI.ParkingSlotsUI import ParkingSlotsUI
+
+import Common as Common
 
 class ParkingUI(QtGui.QMainWindow):
 
@@ -26,9 +29,11 @@ class ParkingUI(QtGui.QMainWindow):
         # Se muestra Error en caso de que haya algun problema con algun cilindro
         self.statusBar().showMessage('Normal')
 
-        self.cylinder1 = CylinderUI()
-        self.cylinder2 = CylinderUI()
-        self.cylinder3 = CylinderUI()
+        self.cylinder1 = CylinderUI(Common.Cylinder(1))
+        self.cylinder2 = CylinderUI(Common.Cylinder(2))
+        self.cylinder3 = CylinderUI(Common.Cylinder(3))
+
+        self.parkingSlots = ParkingSlotsUI(Common.ParkingSlots());
 
         # main layout
         self.mainLayout = QtGui.QHBoxLayout()
@@ -37,6 +42,7 @@ class ParkingUI(QtGui.QMainWindow):
         self.mainLayout.addWidget(self.cylinder1)
         self.mainLayout.addWidget(self.cylinder2)
         self.mainLayout.addWidget(self.cylinder3)
+        self.mainLayout.addWidget(self.parkingSlots)
 
         # central widget
         centralWidget = QtGui.QWidget()
