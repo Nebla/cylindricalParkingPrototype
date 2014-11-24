@@ -21,7 +21,8 @@ import parking_app.concurrent.SharedHandler as ShHan
 import parking_app.concurrent.SharedAlarms as SharedAlarms
 
 from multiprocessing.managers import BaseManager
-from multiprocessing import Process, Lock, Queue, Array, Manager
+from multiprocessing import Process, Lock, Queue, Array, Manager, SimpleQueue, Pipe
+import queue
 
 class ParkingUI(QtGui.QMainWindow):
 
@@ -40,6 +41,7 @@ class ParkingUI(QtGui.QMainWindow):
         parking_manager.start()
         parking_slot = parking_manager.ParkingSlot(qtty_slots)
 
+        #[recv_q, send_q] = Pipe()
         self.__input_queue = Queue()
         deliver_queue = Queue()
 
@@ -60,12 +62,13 @@ class ParkingUI(QtGui.QMainWindow):
         platform_Controller.start()
 
         dispatcher_controller = Robotic_Dispatcher.RoboticDispatcher(qtty_cylinders)
+
         dispatcher_controller.initialize(cylinders, mutex_cylinders,
                                          self.__input_queue, sh_buffers, mutex_buffers)
         dispatcher_controller.start()
 
         robotic_deliverer_controller = Robotic_Deliverer.RoboticDeliverer()
-        robotic_deliverer_controller.initialize(self.__input_queue, parking_slot,
+        robotic_deliverer_controller.initialize(deliver_queue, parking_slot,
                                                 mutex_parking_slot)
         robotic_deliverer_controller.start()
 

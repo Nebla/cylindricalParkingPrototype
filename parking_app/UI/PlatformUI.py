@@ -134,7 +134,7 @@ class PlatformUI(QtGui.QWidget):
             elif vehicle_weight == Common.Weights.light.value:
                 vehicleName = 'CarSide.png'
             elif vehicle_weight == Common.Weights.heavy.value:
-                vehicleName = '.png'
+                vehicleName = 'AutoTruckSide.png'
             elif vehicle_weight == Common.Weights.veryHeavy.value:
                 vehicleName = 'TrukSide.png'
 

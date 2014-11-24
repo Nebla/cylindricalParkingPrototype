@@ -25,7 +25,8 @@ class RoboticDispatcher(QtCore.QThread):
 
     def obtain_car_and_hours(self):
         print ("Robotic dispatcher - obtaining car an hours")
-        return self.__sh_conveyor.get(True, None)
+        car_and_hours = self.__sh_conveyor.get()
+        return car_and_hours
 
     def get_available_cylinders(self):
         ran_cyl = range(self.__qtty_cylinders)
