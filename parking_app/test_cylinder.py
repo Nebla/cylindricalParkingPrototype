@@ -5,9 +5,10 @@ from parking_app.Common import Cylinder, Vehicle, Weights, Sector
 
 class TestCylinderFunctions(unittest.TestCase):
     def setUp(self):
+        self.cyl_id = 1
         self.columns = 1
         self.levels = 3
-        self.cylinder = self.CylinderExtension(self.levels, self.columns)
+        self.cylinder = self.CylinderExtension(self.cyl_id, self.levels, self.columns)
 
     def test_cylinder_well_initialized(self):
         self.assertEqual(self.cylinder.get_amount_columns(), self.columns,
@@ -73,14 +74,18 @@ class TestCylinderFunctions(unittest.TestCase):
         pos = self.cylinder.get_position_to_save_car(hours)
         self.assertEqual(pos, [2, 0])
 
-    def test_get_position_to_save_car_returns_none(self):
+    def test_get_position_to_save_car_returns_exception(self):
         car = Vehicle(1, Weights.heavy)
-        level = 1
         column = 0
         hours = 4
+        level = 0
+        self.cylinder.add_car(car, level, column, hours)
+        level = 1
+        self.cylinder.add_car(car, level, column, hours)
+        level = 2
         self.cylinder.add_car(car, level, column, hours)
 
-        self.assertFalse(self.cylinder.get_position_to_save_car(hours))
+        self.assertRaises(Exception, self.cylinder.get_position_to_save_car, hours)
 
     def test_get_car(self):
         car = Vehicle(1, Weights.heavy)
@@ -91,6 +96,9 @@ class TestCylinderFunctions(unittest.TestCase):
 
         retired_car = self.cylinder.get_car(level, column)
         self.assertEqual(retired_car, car, "must be the same car")
+        self.assertEqual(self.cylinder.get_actual_weight(), 0, "the weigth should be 0")
+        self.assertEqual(self.cylinder.get_amount_occupied(), 0, "there must be no car")
+        self.assertRaises(Exception, self.cylinder.get_car, level, column)
 
     def test_get_two_cars_from_same_platform(self):
         car = Vehicle(1, Weights.heavy)
@@ -147,8 +155,8 @@ class TestCylinderFunctions(unittest.TestCase):
 
     class CylinderExtension(Cylinder):
 
-        def __init__(self, levels, columns):
-            super().__init__(levels, columns)
+        def __init__(self, cylinder_id, levels, columns):
+            super().__init__(cylinder_id, levels, columns)
 
         def get_amount_columns(self):
             return self._qttyColumns

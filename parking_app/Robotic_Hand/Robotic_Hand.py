@@ -41,16 +41,17 @@ class RoboticHand(QtCore.QThread):
         platforms = self.__get_platforms(f)
         [level, column] = platforms[0]
 
-        cylinder = self.__shared_cylinder.cylinder
+        cylinder = self.__shared_cylinder.data
         car = cylinder.get_car(level, column)
-        self.__shared_cylinder.cylinder = cylinder
+        self.__shared_cylinder.data = cylinder
         print("robotic hand, deliver car")
         self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), Common.Alarm.stay.value)
 
         return car
 
     def deliver_car(self, car):
-        self.__sh_conveyor.add(car)
+        time.sleep(6)
+        self.__sh_conveyor.put(car)
 
     def car_to_save(self):
         car_and_hours = self.__sh_buff_input.data
@@ -64,7 +65,7 @@ class RoboticHand(QtCore.QThread):
         car_and_hour[0] = None
         car_and_hour[1] = None
         self.__sh_buff_input.data = car_and_hour
-        return car,hour
+        return [car, hour]
 
     def save_car(self, car, hours):
         cylinder = self.__shared_cylinder.data
@@ -113,11 +114,16 @@ class RoboticHand(QtCore.QThread):
 
     def __get_platforms(self, f):
         alarms = self.__shared_alarms.data
-
         platforms = [[lvl, col] for lvl in range(self._qtty_levels)
                      for col in range(self._qtty_columns)
                      if f(alarms[lvl][col])]
+
+        [lvl, col] = platforms[0]
+        level_array = alarms[lvl]
+        level_array[col] = None
+        alarms[lvl] = level_array
         self.__shared_alarms.data = alarms
+        # now i should update the visual
         return platforms
 
     def run(self):
@@ -130,14 +136,14 @@ class RoboticHand(QtCore.QThread):
                 self.deliver_car(car)
 
             if self.car_to_save():
-                print ("Robotic Hand - Estacionando auto")
+                print("Robotic Hand - Estacionando auto")
                 [car, hours] = self.get_car_to_save()
                 self.save_car(car, hours)
 
             can_reorder = not (self.car_to_save() or self.car_to_deliver()
                                or self.little_time_to_deliver())
             if can_reorder and self.car_to_reorder():
-                print ("Robotic Hand - Reacomodando auto")
+                print("Robotic Hand - Reacomodando auto")
                 [car, hours] = self.get_car_to_reorder()
                 self.save_car(car, hours)
 
