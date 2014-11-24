@@ -59,8 +59,12 @@ class RoboticHand(QtCore.QThread):
 
     def get_car_to_save(self):
         car_and_hour = self.__sh_buff_input.data
-        self.__sh_buff_input.data = [None, None]
-        return car_and_hour
+        car = car_and_hour[0]
+        hour = car_and_hour[1]
+        car_and_hour[0] = None
+        car_and_hour[1] = None
+        self.__sh_buff_input.data = car_and_hour
+        return car,hour
 
     def save_car(self, car, hours):
         cylinder = self.__shared_cylinder.data
@@ -117,6 +121,7 @@ class RoboticHand(QtCore.QThread):
         return platforms
 
     def run(self):
+        print("Start running robotic hand")
         while True:
             time.sleep(2)
             while self.car_to_deliver():
@@ -132,6 +137,7 @@ class RoboticHand(QtCore.QThread):
             can_reorder = not (self.car_to_save() or self.car_to_deliver()
                                or self.little_time_to_deliver())
             if can_reorder and self.car_to_reorder():
+                print ("Robotic Hand - Reacomodando auto")
                 [car, hours] = self.get_car_to_reorder()
                 self.save_car(car, hours)
 

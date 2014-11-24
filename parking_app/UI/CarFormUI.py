@@ -98,7 +98,7 @@ class CarFormUI(QtGui.QWidget):
             return Common.Weights.veryHeavy
 
     def acept(self):
-        print('Aceptar - Enviar los datos al estacionamiento')
+        print('Car Form UI - Aceptar - Enviar los datos al estacionamiento')
         # Enviar los datos al estacionamiento
         hours = int(self.otroSpinBox.text())
         if self.estadia.isChecked():
@@ -108,6 +108,7 @@ class CarFormUI(QtGui.QWidget):
 
         vehicle = Common.Vehicle(self.patente.text(), self.getWeight())
         self.__input_queue.put([vehicle, hours])
+        print('Car Form UI - Aceptar - Enviados los datos al estacionamiento')
         self.close()
 
     def cancel(self):

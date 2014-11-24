@@ -65,6 +65,7 @@ class PlatformController(QtCore.QThread):
         time.sleep(self.Minute)
 
     def run(self):
+        print("Start running platform controller")
         while True:
             for cyl_id in self.get_cylinders_id():
                 platforms = self.get_used_platforms(cyl_id)

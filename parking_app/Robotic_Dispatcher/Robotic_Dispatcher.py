@@ -12,7 +12,7 @@ from PyQt4 import QtCore
 class RoboticDispatcher(QtCore.QThread):
 
     def __init__(self, qtty_cylinders):
-        super(RoboticDispatcher, self).__init__()
+        QtCore.QThread.__init__(self)
         self.__qtty_cylinders = qtty_cylinders
         self.__sh_buff = None
         self.__cylinders = None
@@ -24,7 +24,8 @@ class RoboticDispatcher(QtCore.QThread):
         self.__sh_conveyor = conveyor
 
     def obtain_car_and_hours(self):
-        return self.__sh_conveyor.get()
+        print ("Robotic dispatcher - obtaining car an hours")
+        return self.__sh_conveyor.get(True, None)
 
     def get_available_cylinders(self):
         ran_cyl = range(self.__qtty_cylinders)
@@ -72,16 +73,20 @@ class RoboticDispatcher(QtCore.QThread):
         self.__sh_buff[cyl_id].data = car_hours
 
     def run(self):
+        print("Start running robot dispatcher")
         while True:
             car_and_hours = self.obtain_car_and_hours()
+            print("Robot dispatcher - Obtain car and hours to store in buffer")
             available_cylinders = self.get_available_cylinders()
             while self.buffers_are_occupied(available_cylinders):
-                self.sleep(5)
+                print("Robot dispatcher - Waiting for available cylinders")
+                self.sleep(2)
                 available_cylinders = self.get_available_cylinders()
 
             weights = [cyl.weight for cyl in available_cylinders]
             cyl_id = available_cylinders[weights.index(min(weights))].id()
             self.save_car(car_and_hours, cyl_id, available_cylinders)
+            print("Robot dispatcher - Saved car")
 
 """
 def start(qtty_cylinders, cylinders, mutex_cylinders, deliver_queue, buffers, mutex_buffers):
