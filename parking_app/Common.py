@@ -40,6 +40,9 @@ class Sector(Enum):
 
 
 class ParkingSlots():
+    # level, column, vehicle id, vehicle weight
+    update = QtCore.pyqtSignal(int, int, str, int)
+
     def __init__(self, quantity_slots=10):
         self.__levels = 2
         self.__columns = int(quantity_slots/self.__levels)
@@ -52,11 +55,17 @@ class ParkingSlots():
             return False
         [lvl, col] = free_slots[0]
         self.__slots[lvl][col] = car
+
+        self.update.emit(lvl, col, car.get_patent(), car.get_weight())
         return True
     
     def get_car(self, lvl, col):
-        #todo
-        pass
+        if self.__slots[lvl][col] is None:
+            raise Exception("can not get a car from free slot")
+        self.update.emit(lvl, col, "", Weights.empty.value)
+        car = self.__slots[lvl][col]
+        self.__slots[lvl][col] = None
+        return car
 
     def __get_index_free_spaces(self):
         levels = range(self.__levels)
