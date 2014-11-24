@@ -1,11 +1,22 @@
 __author__ = 'fsoler'
+
 import time
+import string as string
+
 import parking_app.Common as Common
 import parking_app.concurrent.SharedHandler as ShHan
 
+from PyQt4 import QtCore
 
-class RoboticHand():
+class RoboticHand(QtCore.QObject):
+
+    # cylinder, level, column, vehicle id, vehicle weight, alarm
+    update = QtCore.pyqtSignal(int, int, int, str, int, int)
+
+
     def __init__(self, cylinder_id, qtty_levels, qtty_columns):
+        super(RoboticHand, self).__init__()
+
         self._id = cylinder_id
         self._qtty_levels = qtty_levels
         self._qtty_columns = qtty_columns
@@ -34,6 +45,8 @@ class RoboticHand():
         car = cylinder.get_car(level, column)
         self.__shared_cylinder.cylinder = cylinder
 
+        self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), 0)
+
         return car
 
     def deliver_car(self, car):
@@ -51,9 +64,11 @@ class RoboticHand():
 
     def save_car(self, car, hours):
         cylinder = self.__shared_cylinder.data
-        [lvl, col] = cylinder.get_position_to_save_car(hours)
-        cylinder.add_car(car, lvl, col, hours)
+        [level, column] = cylinder.get_position_to_save_car(hours)
+        cylinder.add_car(car, level, column, hours)
         self.__shared_cylinder.data = cylinder
+
+        self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), 0)
 
     def get_car_to_reorder(self):
         f = lambda x: x == Common.Alarm.oneLevelDown or Common.Alarm.twoLevelDown
@@ -107,8 +122,8 @@ class RoboticHand():
             while self.car_to_deliver():
                 car = self.get_car_to_deliver()
                 self.deliver_car(car)
-            if self.car_to_save():
 
+            if self.car_to_save():
                 [car, hours] = self.get_car_to_save()
                 self.save_car(car, hours)
 

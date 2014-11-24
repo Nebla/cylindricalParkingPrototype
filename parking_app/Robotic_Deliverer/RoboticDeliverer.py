@@ -17,9 +17,9 @@ class RoboticDeliverer():
         return self.__sh_conveyor.get()
 
     def place_car_into_garage(self, car):
-        parking_slots = self.__sh_slots.slots
-        result = parking_slots.save_car()
-        self.__sh_slots.slots = parking_slots
+        parking_slots = self.__sh_slots.data
+        result = parking_slots.save_car(car)
+        self.__sh_slots.data = parking_slots
         return result
 
     def wait_for_place_into_garage(self):

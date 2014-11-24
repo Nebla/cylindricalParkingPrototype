@@ -12,6 +12,6 @@ class SharedHandler():
             return self.__sh_data
 
         @data.setter
-        def data(self, alarms):
-            self.__sh_data = alarms
+        def data(self, data):
+            self.__sh_data = data
             self.__mutex.release()

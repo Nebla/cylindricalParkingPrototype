@@ -14,59 +14,36 @@ class PlatformUI(QtGui.QWidget):
     def __init__(self, platform):
         super(PlatformUI, self).__init__()
         self.platform = platform
+
         self.initUI()
 
     def initUI(self):
 
-        self.status = random.randint(0,2)
+        vertical = QtGui.QVBoxLayout()
+        horizontal = QtGui.QHBoxLayout()
 
-        color = QtGui.QColor(150, 150, 150)
+        # Vehicle ID
+        self.lbl_patente = QtGui.QLabel('',self)
 
-        if not self.platform.is_empty():
-            color = QtGui.QColor(100, 100, 255)
+        horizontal.addWidget(self.lbl_patente)
 
-            vertical = QtGui.QVBoxLayout()
-            horizontal = QtGui.QHBoxLayout()
+        # Alarm
+        self.warningButton = QtGui.QPushButton()
+        self.warningButton.setIcon(QtGui.QIcon('Warning.png'))
+        self.warningButton.setIconSize(QtCore.QSize(15,15))
+        self.warningButton.clicked.connect(self.showWarningOffConfirmation)
+        self.warningButton.setVisible(False)
 
-            # Vehicle ID
-            lbl1 = QtGui.QLabel(self.platform.vehicle.patent,self)
-            #vertical.addWidget(lbl1)
+        horizontal.addWidget(self.warningButton)
 
-            horizontal.addWidget(lbl1)
+        vertical.addLayout(horizontal)
 
-            # Alarm
-            self.warningButton = QtGui.QPushButton()
-            self.warningButton.setIcon(QtGui.QIcon('Warning.png'))
-            self.warningButton.setIconSize(QtCore.QSize(15,15))
-            self.warningButton.clicked.connect(self.showAlarmOffConfirmation)
-            self.warningButton.setVisible(False)
-            horizontal.addWidget(self.alarmButton)
+        self.lbl_vehicle = QtGui.QLabel(self)
+        vertical.addWidget(self.lbl_vehicle)
 
-            vertical.addLayout(horizontal)
+        self.setLayout(vertical)
 
-            # Current vehicle
-            vehicleName = ''
-            if self.platform.get_weight() == Common.Weights.veryLight:
-                vehicleName = 'MotoSide.png'
-            elif self.platform.get_weight() == Common.Weights.light:
-                vehicleName = 'CarSide.png'
-            elif self.platform.get_weight() == Common.Weights.heavy:
-                vehicleName = '.png'
-            elif self.platform.get_weight() == Common.Weights.veryHeavy:
-                vehicleName = 'TrukSide.png'
-
-
-            lbl2 = QtGui.QLabel(self)
-            pixmap2 = QtGui.QPixmap(vehicleName)
-            pixmap2 = pixmap2.scaled(40, 40, QtCore.Qt.KeepAspectRatio)
-            lbl2.setPixmap(pixmap2)
-
-            vertical.addWidget(lbl2)
-
-            self.setLayout(vertical)
-
-        self.setBackgroundColor(color)
-
+        self.update()
 
     def showWarningOffConfirmation(self):
         self.confirmationMessage = WarningConfirmationUI()
@@ -89,3 +66,36 @@ class PlatformUI(QtGui.QWidget):
         p = self.palette()
         p.setColor(self.backgroundRole(), color)
         self.setPalette(p)
+
+    def update(self):
+        color = QtGui.QColor(150, 150, 150)
+
+        self.lbl_vehicle.setHidden(True)
+        self.lbl_patente.setHidden(True)
+
+        if not self.platform.is_empty():
+            color = QtGui.QColor(100, 100, 255)
+
+            # Vehicle ID
+            self.lbl_patente.text(self.platform.vehicle.patent)
+            #vertical.addWidget(lbl1)
+
+            # Current vehicle
+            vehicleName = ''
+            if self.platform.get_weight() == Common.Weights.veryLight:
+                vehicleName = 'MotoSide.png'
+            elif self.platform.get_weight() == Common.Weights.light:
+                vehicleName = 'CarSide.png'
+            elif self.platform.get_weight() == Common.Weights.heavy:
+                vehicleName = '.png'
+            elif self.platform.get_weight() == Common.Weights.veryHeavy:
+                vehicleName = 'TrukSide.png'
+
+            pixmap2 = QtGui.QPixmap(vehicleName)
+            pixmap2 = pixmap2.scaled(40, 40, QtCore.Qt.KeepAspectRatio)
+            self.lbl_vehicle.setPixmap(pixmap2)
+
+            self.lbl_vehicle.setHidden(False)
+            self.lbl_patente.setHidden(False)
+
+        self.setBackgroundColor(color)

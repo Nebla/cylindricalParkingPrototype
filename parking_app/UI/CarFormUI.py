@@ -3,10 +3,13 @@ __author__ = 'adrian'
 from PyQt4 import QtGui
 import parking_app.Common as Common
 
+from multiprocessing import Queue
+
 class CarFormUI(QtGui.QWidget):
 
-    def __init__(self, parent = None):
-        super(CarFormUI, self).__init__(parent)
+    def __init__(self, input_queue):
+        super(CarFormUI, self).__init__()
+        self.__input_queue = input_queue
 
         self.initUI()
 
@@ -97,14 +100,15 @@ class CarFormUI(QtGui.QWidget):
     def acept(self):
         print('Aceptar - Enviar los datos al estacionamiento')
         # Enviar los datos al estacionamiento
-        hours = int(self.otroSpinBox.text)
+        hours = int(self.otroSpinBox.text())
         if self.estadia.isChecked():
             hours = 12
         elif self.mediaEstadia.isChecked():
             hours = 6
 
         vehicle = Common.Vehicle(self.patente, self.getWeight())
-        #self.__input_queue([vehicle, hours])
+        self.__input_queue.put([vehicle, hours])
+        self.close()
 
     def cancel(self):
         print('Cancelar')

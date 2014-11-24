@@ -1,14 +1,20 @@
 __author__ = 'fsoler'
-import sys
+
 import time
 import parking_app.Common as Common
 import parking_app.concurrent.SharedHandler as ShHan
 
+from PyQt4 import QtCore
 
-class PlatformController():
-    Minute = 60
+class PlatformController(QtCore.QObject):
+
+    # cilindro, level, column, vehicle, alarm
+    update = QtCore.pyqtSignal(int, int, int, Common.Vehicle, Common.Alarm)
+
+    Minute = 5
 
     def __init__(self, qtty_cylinders):
+        super(PlatformController, self).__init__()
         self.__qtty_cylinders = qtty_cylinders
         self.__temporal_cylinder = None
         self.__cylinders = None
@@ -72,8 +78,10 @@ class PlatformController():
 
                     if remaining_time <= 0:
                         self.set_alarm(cyl_id, Common.Alarm.deliver, level, column)
+
                     elif remaining_time <= Common.Margin_time:
                         self.set_alarm(cyl_id, Common.Alarm.lessThanMarginTime, level, column)
+
 
                     if sector != Common.Sector.lower and not self.is_marked_to_leave(cyl_id, platform):
                         for sec in Common.Sector:

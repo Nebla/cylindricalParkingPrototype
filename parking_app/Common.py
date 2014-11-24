@@ -2,6 +2,7 @@ __author__ = 'fsoler'
 from enum import Enum
 import time
 import calendar
+from PyQt4 import QtCore
 
 '''
 esta clase alarma es para reordenar los autos o sacarlos, el mensaje pone la alarma en deliver
@@ -16,10 +17,11 @@ Robotic_deliverer_id = 4
 
 
 class Alarm(Enum):
-    deliver = 0
-    oneLevelDown = 1
-    twoLevelDown = 2
-    lessThanMarginTime = 3
+    stay = 0
+    deliver = 1
+    oneLevelDown = 2
+    twoLevelDown = 3
+    lessThanMarginTime = 4
 
 
 class Weights(Enum):
@@ -69,6 +71,10 @@ class Vehicle():
     def get_weight(self):
         return self._weight.value
 
+    def get_patent(self):
+        patent = self._patent
+        return patent
+
     def has_this_patent(self, patent):
         return self._patent == patent
 
@@ -78,9 +84,11 @@ class Vehicle():
 
 
 class Platform():
+
     TimeFormat = "%y-%m-%dT%H:%M:%S +0000"
 
     def __init__(self, level, column):
+
         self.__level = level
         self.__column = column
         self.__isOccupied = False
@@ -96,7 +104,7 @@ class Platform():
     def __sec2hour(seconds):
         return seconds / 3600
 
-    # length_of_stay expressed in horas
+    # length_of_stay expressed in hours
     def save_car(self, car, length_of_stay):
         if self.__isOccupied:
             raise Exception("this platform is occupied, can not add a car")
@@ -112,6 +120,7 @@ class Platform():
 
         self.__isOccupied = False
         car = self.__vehicle
+
         return car
 
     def get_weight(self):
