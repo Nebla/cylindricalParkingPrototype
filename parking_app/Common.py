@@ -3,6 +3,7 @@ from enum import Enum
 import time
 import calendar
 from PyQt4 import QtCore
+import copy
 
 '''
 esta clase alarma es para reordenar los autos o sacarlos, el mensaje pone la alarma en deliver
@@ -180,7 +181,7 @@ class Cylinder():
         col_weights = [sum([self.__platforms[lvl][col].get_weight() for lvl in level_range])
                        for col in range(self._qttyColumns)]
 
-        temp_platforms = self.__platforms
+        temp_platforms = copy.deepcopy(self.__platforms)
         for _ in range(self._qttyColumns):
             col = col_weights.index(min(col_weights))
             # aca hago un for de los niveles para ver si encuentro lugar
@@ -189,7 +190,7 @@ class Cylinder():
                     return [lvl, col]
             col_weights.pop(col)
             [temp_platforms[lvl].pop(col) for lvl in level_range]
-
+        # list of sectors, i must do a pop(sector) and then search for free place
         return [None, None]
 
     def get_remaining_time(self, level, column):

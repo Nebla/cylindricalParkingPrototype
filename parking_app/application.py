@@ -203,8 +203,8 @@ ParkingSlotManager.register("ParkingSlot", Common.ParkingSlots)
 def main():
     # we must use the bounded semaphore
     app = QtGui.QApplication(sys.argv)
-    levels = 6
-    columns = 3
+    levels = 3
+    columns = 1
     qtty_cylinders = 1
     qtty_slots = 10
 
