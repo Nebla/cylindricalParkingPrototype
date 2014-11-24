@@ -27,6 +27,27 @@ class PlatformController(QtCore.QThread):
         self.__alarms = [ShHan.SharedHandler(sh_alarm[cyl_id],
                                              mtx_alarms[cyl_id])
                          for cyl_id in range(self.__qtty_cylinders)]
+        '''
+        alarms = self.__alarms[0].data
+        print("1")
+        print(alarms)
+        col = alarms[1]
+        col[0] = Common.Alarm(1)
+        alarms[1] = col
+        col = alarms[0]
+        col[0] = Common.Alarm(0)
+        alarms[0] = col
+        print("2")
+        print(alarms)
+        self.__alarms[0].data = alarms
+
+        alarms = self.__alarms[0].data
+        print("3")
+        print(alarms)
+
+        self.__alarms[0].data = alarms
+        exit()
+        '''
 
     def get_cylinders_id(self):
         return range(self.__qtty_cylinders)
@@ -41,7 +62,9 @@ class PlatformController(QtCore.QThread):
 
     def set_alarm(self, cylinder, alarm, level, column):
         alarms = self.__alarms[cylinder].data
-        alarms[level][column] = alarm
+        level_array = alarms[level]
+        level_array[column] = alarm
+        alarms[level] = level_array
         self.__alarms[cylinder].data = alarms
 
     def is_marked_to_leave(self, cylinder, platform):
@@ -91,6 +114,7 @@ class PlatformController(QtCore.QThread):
                         self.update.emit(cyl_id, level, column,
                                          platform.vehicle().get_patent(),
                                          platform.get_weight(), alarm.value)
+
 
                     if sector != Common.Sector.lower and not self.is_marked_to_leave(cyl_id, platform):
                         for sec in Common.Sector:

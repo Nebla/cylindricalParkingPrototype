@@ -44,7 +44,7 @@ class RoboticHand(QtCore.QThread):
         cylinder = self.__shared_cylinder.cylinder
         car = cylinder.get_car(level, column)
         self.__shared_cylinder.cylinder = cylinder
-
+        print("robotic hand, deliver car")
         self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), Common.Alarm.stay.value)
 
         return car

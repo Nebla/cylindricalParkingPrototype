@@ -23,6 +23,8 @@ import parking_app.concurrent.SharedAlarms as SharedAlarms
 from multiprocessing.managers import BaseManager
 from multiprocessing import Process, Lock, Queue, Array, Manager, SimpleQueue, Pipe
 import queue
+import copy
+
 
 class ParkingUI(QtGui.QMainWindow):
 
@@ -41,7 +43,6 @@ class ParkingUI(QtGui.QMainWindow):
         parking_manager.start()
         parking_slot = parking_manager.ParkingSlot(qtty_slots)
 
-        #[recv_q, send_q] = Pipe()
         self.__input_queue = Queue()
         deliver_queue = Queue()
 
@@ -51,9 +52,10 @@ class ParkingUI(QtGui.QMainWindow):
         mutex_parking_slot = Lock()
 
         alarms = [[None for _ in range(columns)] for _ in range(levels)]
+        alarms = [copy.deepcopy(alarms) for _ in range(qtty_cylinders)]
         car_and_hours = [None, None]
 
-        sh_alarms = [Manager().list(alarms) for _ in range(qtty_cylinders)]
+        sh_alarms = [Manager().list(alarms[i]) for i in range(qtty_cylinders)]
         sh_buffers = [Manager().list(car_and_hours) for _ in range(qtty_cylinders)]
 
         platform_controller = Platform_Controller.PlatformController(qtty_cylinders)
