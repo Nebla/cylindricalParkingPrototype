@@ -40,9 +40,9 @@ class RoboticDispatcher(QtCore.QObject):
         return False if [i for i in range(len(buffers))
                          if buffers[i][0] is None] else True
 
-    def sleep(self):
+    def sleepSeconds(self, seconds):
         #todo
-        time.sleep(10)
+        time.sleep(seconds)
 
     def get_available_buffers(self, available_cyl=None):
         buffers = self.__get_buffers(available_cyl)
@@ -66,15 +66,17 @@ class RoboticDispatcher(QtCore.QObject):
     def save_car(self, car_and_hours, cyl_id, available_cyl=None):
         if available_cyl is not None:
             self.__return_cylinders(available_cyl)
-        _ = self.__sh_buff[cyl_id].data
-        self.__sh_buff[cyl_id].data = car_and_hours
+        car_hours = self.__sh_buff[cyl_id].data
+        car_hours[0] = car_and_hours[0]
+        car_hours[1] = car_and_hours[1]
+        self.__sh_buff[cyl_id].data = car_hours
 
     def run(self):
         while True:
             car_and_hours = self.obtain_car_and_hours()
             available_cylinders = self.get_available_cylinders()
             while self.buffers_are_occupied(available_cylinders):
-                self.sleep()
+                self.sleep(5)
                 available_cylinders = self.get_available_cylinders()
 
             weights = [cyl.weight for cyl in available_cylinders]

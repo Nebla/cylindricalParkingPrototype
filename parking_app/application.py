@@ -23,6 +23,7 @@ from multiprocessing import Process, Lock, Queue, Array, Manager
 
 class ParkingUI(QtGui.QMainWindow):
 
+    """
     def __init__(self, cylinders,  mutex_cylinders, parking_slot, mutex_parking_slot, input_queue):
         super(ParkingUI, self).__init__()
 
@@ -30,6 +31,77 @@ class ParkingUI(QtGui.QMainWindow):
 
         self.__input_queue = input_queue
         self.__parking_slot = ShHan.SharedHandler(parking_slot, mutex_parking_slot)
+        self.init_ui()
+    """
+
+    def __init__(self, qtty_cylinders,  levels, columns, qtty_slots):
+        super(ParkingUI, self).__init__()
+
+        self.cylindersUI = []
+
+        cylinders = []
+
+        for i in range(qtty_cylinders):
+            cylinder_manager = CylinderManager()
+            cylinder_manager.start()
+            cylinders.append(cylinder_manager.Cylinder(i, levels, columns))
+
+
+        parking_manager = ParkingSlotManager()
+        parking_manager.start()
+        parking_slot = parking_manager.ParkingSlot(qtty_slots)
+
+        input_queue = Queue()
+        deliver_queue = Queue()
+
+        mutex_cylinders = [Lock() for _ in range(qtty_cylinders)]
+        mutex_alarms = [Lock() for _ in range(qtty_cylinders)]
+        mutex_buffers = [Lock() for _ in range(qtty_cylinders)]
+        mutex_parking_slot = Lock()
+
+        alarms = [[None for _ in range(columns)] for _ in range(levels)]
+        car_and_hours = [None, None]
+
+        sh_alarms = [Manager().list(alarms) for _ in range(qtty_cylinders)]
+        sh_buffers = [Manager().list(car_and_hours) for _ in range(qtty_cylinders)]
+
+        processes = []
+
+        platform_Controller = Platform_Controller.PlatformController(qtty_cylinders)
+        platform_Controller.initialize(cylinders, mutex_cylinders, sh_alarms,
+                                       mutex_alarms)
+
+        processes.append(Process(target=Platform_Controller.start, args=(platform_Controller,)))
+
+        dispatcher_controller = Robotic_Dispatcher.RoboticDispatcher(qtty_cylinders)
+        dispatcher_controller.initialize(cylinders, mutex_cylinders,
+                                         input_queue, sh_buffers, mutex_buffers)
+
+        processes.append(Process(target=Robotic_Dispatcher.start, args=(dispatcher_controller,)))
+
+        processes.append(Process(target=Robotic_Deliverer.start, args=(
+            deliver_queue, parking_slot, mutex_parking_slot)))
+
+        robotic_hand_list = []
+        for i in range(qtty_cylinders):
+            hand_controller = Robotic_Hand.RoboticHand(i, levels, columns)
+            hand_controller.initialize(cylinders[i], mutex_cylinders[i], sh_buffers[i],
+                                       mutex_buffers[i], sh_alarms[i], mutex_alarms[i], deliver_queue)
+
+            robotic_hand_list.append(hand_controller)
+            processes.append(Process(target=Robotic_Hand.start, args=(hand_controller,)))
+
+        for robotic_hand in robotic_hand_list:
+            QtCore.QObject.connect(robotic_hand, QtCore.SIGNAL('update(int, int, int, QString, int, int)'), self.updateUI)
+
+        [process.start() for process in processes]
+
+        self.__cylinders = [ShHan.SharedHandler(cylinders[i], mutex_cylinders[i]) for i in range(len(cylinders))]
+
+        self.__input_queue = input_queue
+        self.__parking_slot = ShHan.SharedHandler(parking_slot, mutex_parking_slot)
+
+
         self.init_ui()
 
     def init_ui(self):
@@ -51,7 +123,9 @@ class ParkingUI(QtGui.QMainWindow):
 
         for i in self.__cylinders:
             cylinder = i.data
-            main_layout.addWidget(CylinderUI(cylinder))
+            cylinderUI = CylinderUI(cylinder)
+            main_layout.addWidget(cylinderUI)
+            self.cylindersUI.append(cylinderUI)
             i.data = cylinder
 
         main_layout.addWidget(ParkingSlotsUI(self.__parking_slot))
@@ -132,12 +206,9 @@ class ParkingUI(QtGui.QMainWindow):
         print("Muestra pop up para retirar un auto")
 
     def updateUI(self, cylinder, level, column, vehicle_patent, vehicle_weight, alarm):
-        print("should update ui!!!!")
-        print(cylinder)
-        print(level)
-        print(column)
-        print(vehicle_patent)
-        print(vehicle_weight)
+        print("aaaaa")
+        print("Should update ui - cylinder %d level %d column %d patent %s"%(cylinder, level, column, vehicle_patent))
+        self.cylindersUI[cylinder].updatePlatform(level, column, vehicle_patent, vehicle_weight, alarm)
 
 class CylinderManager(BaseManager):
     pass
@@ -157,6 +228,9 @@ def main():
     qtty_cylinders = 1
     qtty_slots = 10
 
+    parkingUI = ParkingUI(qtty_cylinders,  levels, columns, qtty_slots)
+
+    """
     cylinders = []
 
     for i in range(qtty_cylinders):
@@ -214,14 +288,13 @@ def main():
         robotic_hand_list.append(hand_controller)
         processes.append(Process(target=Robotic_Hand.start, args=(hand_controller,)))
 
-
     parkingUI = ParkingUI(cylinders,  mutex_cylinders, parking_slot, mutex_parking_slot, input_queue)
 
     for robotic_hand in robotic_hand_list:
         QtCore.QObject.connect(robotic_hand, QtCore.SIGNAL('update(int, int, int, QString, int, int)'), parkingUI.updateUI)
 
     [process.start() for process in processes]
-
+    """
     sys.exit(app.exec_())
 
 

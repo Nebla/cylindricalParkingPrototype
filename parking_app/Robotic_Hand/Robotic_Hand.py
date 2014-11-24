@@ -118,12 +118,14 @@ class RoboticHand(QtCore.QObject):
 
     def run(self):
         while True:
-            time.sleep(1)
+            time.sleep(2)
             while self.car_to_deliver():
+                print("Robotic Hand - Retirando auto")
                 car = self.get_car_to_deliver()
                 self.deliver_car(car)
 
             if self.car_to_save():
+                print ("Robotic Hand - Estacionando auto")
                 [car, hours] = self.get_car_to_save()
                 self.save_car(car, hours)
 

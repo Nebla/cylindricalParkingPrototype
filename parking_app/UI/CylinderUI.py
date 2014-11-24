@@ -17,11 +17,14 @@ class CylinderUI(QtGui.QWidget):
         grid = QtGui.QGridLayout()
         self.setLayout(grid)
 
-        positions = [(i, j) for i in range(self.cylinder.qtty_levels()) for j in range(self.cylinder.qtty_columns())]
-        platforms = self.cylinder.platforms()
-        for [lvl, col] in positions:
-            platformUI = PlatformUI(platforms[lvl][col])
-            grid.addWidget(platformUI, *[lvl, col])
+
+        self.platformsUI = [[PlatformUI() for col in
+                             range(self.cylinder.qtty_columns())]
+                            for lvl in range(self.cylinder.qtty_levels())]
+
+        [[grid.addWidget(self.platformsUI[lvl][col], *[lvl, col]) for col in
+                             range(self.cylinder.qtty_columns())]
+                            for lvl in range(self.cylinder.qtty_levels())]
 
 
 
@@ -30,3 +33,6 @@ class CylinderUI(QtGui.QWidget):
         #p = self.palette()
         #p.setColor(self.backgroundRole(), QtGui.QColor(200, 0, 0))
         #self.setPalette(p)
+
+    def updatePlatform(self, level, column, vehicle_patent, vehicle_weight, alarm):
+        self.platformsUI[level][column].updateUI(vehicle_patent, vehicle_weight, alarm)

@@ -106,7 +106,7 @@ class CarFormUI(QtGui.QWidget):
         elif self.mediaEstadia.isChecked():
             hours = 6
 
-        vehicle = Common.Vehicle(self.patente, self.getWeight())
+        vehicle = Common.Vehicle(self.patente.text(), self.getWeight())
         self.__input_queue.put([vehicle, hours])
         self.close()
 

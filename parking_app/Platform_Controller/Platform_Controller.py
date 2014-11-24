@@ -8,8 +8,6 @@ from PyQt4 import QtCore
 
 class PlatformController(QtCore.QObject):
 
-    # cilindro, level, column, vehicle, alarm
-    update = QtCore.pyqtSignal(int, int, int, Common.Vehicle, Common.Alarm)
 
     Minute = 5
 
@@ -40,26 +38,26 @@ class PlatformController(QtCore.QObject):
                 if not platforms[lvl][col].is_empty()]
 
     def set_alarm(self, cylinder, alarm, level, column):
-        alarms = self.__alarms[cylinder].alarms
+        alarms = self.__alarms[cylinder].data
         alarms[level][column] = alarm
-        self.__alarms[cylinder] = alarms
+        self.__alarms[cylinder].data = alarms
 
     def is_marked_to_leave(self, cylinder, platform):
         level = platform.level
         column = platform.column
-        alarms = self.__alarms[cylinder].alarms
-        self.__alarms[cylinder] = alarms
+        alarms = self.__alarms[cylinder].data
+        self.__alarms[cylinder].data = alarms
         return alarms[level][column] == Common.Alarm.deliver
 
     def get_sector_from_level(self, level):
         return self.__temporal_cylinder.calculate_sector(level)
 
     def return_used_platforms(self, cylinder_id, platforms):
-        f = lambda x: [x.level, x.column]
+        f = lambda x: [x.level(), x.column()]
         positions = [f(platform) for platform in platforms]
 
         for i in range(len(positions)):
-            self.__temporal_cylinder.platforms[positions[i][0]][positions[i][1]] = platforms[i]
+            self.__temporal_cylinder.platforms()[positions[i][0]][positions[i][1]] = platforms[i]
 
         self.__cylinders[cylinder_id].data = self.__temporal_cylinder
 

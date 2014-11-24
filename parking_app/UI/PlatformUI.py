@@ -11,10 +11,8 @@ import random
 
 class PlatformUI(QtGui.QWidget):
 
-    def __init__(self, platform):
+    def __init__(self):
         super(PlatformUI, self).__init__()
-        self.platform = platform
-
         self.initUI()
 
     def initUI(self):
@@ -23,7 +21,7 @@ class PlatformUI(QtGui.QWidget):
         horizontal = QtGui.QHBoxLayout()
 
         # Vehicle ID
-        self.lbl_patente = QtGui.QLabel('',self)
+        self.lbl_patente = QtGui.QLabel('AAAA',self)
 
         horizontal.addWidget(self.lbl_patente)
 
@@ -43,7 +41,11 @@ class PlatformUI(QtGui.QWidget):
 
         self.setLayout(vertical)
 
-        self.update()
+        color = QtGui.QColor(150, 150, 150)
+        self.setBackgroundColor(color)
+
+        #self.lbl_vehicle.setHidden(True)
+        #self.lbl_patente.setHidden(True)
 
     def showWarningOffConfirmation(self):
         self.confirmationMessage = WarningConfirmationUI()
@@ -67,7 +69,9 @@ class PlatformUI(QtGui.QWidget):
         p.setColor(self.backgroundRole(), color)
         self.setPalette(p)
 
+    """"
     def update(self):
+
         color = QtGui.QColor(150, 150, 150)
 
         self.lbl_vehicle.setHidden(True)
@@ -97,5 +101,48 @@ class PlatformUI(QtGui.QWidget):
 
             self.lbl_vehicle.setHidden(False)
             self.lbl_patente.setHidden(False)
+
+        self.setBackgroundColor(color)
+    """
+
+    def updateUI(self, vehicle_patent, vehicle_weight, alarm):
+        color = QtGui.QColor(150, 150, 150)
+
+        #self.lbl_vehicle.setHidden(True)
+        #self.lbl_patente.setHidden(True)
+
+        if vehicle_weight != Common.Weights.empty:
+
+            if alarm == Common.Alarm.stay:
+                color = QtGui.QColor(100,100,255)
+            elif alarm == Common.Alarm.oneLevelDown:
+                color = QtGui.QColor(150,100,255)
+            elif alarm == Common.Alarm.twoLevelDown:
+                color = QtGui.QColor(200,100,255)
+            elif alarm == Common.Alarm.lessThanMarginTime:
+                color = QtGui.QColor(255,100,255)
+            elif alarm == Common.Alarm.deliver:
+                color = QtGui.QColor(255,100,100)
+
+            # Vehicle ID
+            self.lbl_patente.setText(vehicle_patent)
+
+            # Current vehicle
+            vehicleName = ''
+            if vehicle_weight == Common.Weights.veryLight.value:
+                vehicleName = 'MotoSide.png'
+            elif vehicle_weight == Common.Weights.light.value:
+                vehicleName = 'CarSide.png'
+            elif vehicle_weight == Common.Weights.heavy.value:
+                vehicleName = '.png'
+            elif vehicle_weight == Common.Weights.veryHeavy.value:
+                vehicleName = 'TrukSide.png'
+
+            pixmap2 = QtGui.QPixmap(vehicleName)
+            pixmap2 = pixmap2.scaled(40, 40, QtCore.Qt.KeepAspectRatio)
+            self.lbl_vehicle.setPixmap(pixmap2)
+
+            #self.lbl_vehicle.setHidden(False)
+            #self.lbl_patente.setHidden(False)
 
         self.setBackgroundColor(color)
