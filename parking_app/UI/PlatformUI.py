@@ -111,18 +111,17 @@ class PlatformUI(QtGui.QWidget):
         self.lbl_vehicle.setHidden(True)
         self.lbl_patente.setHidden(True)
 
-        if vehicle_weight != Common.Weights.empty:
-
+        if vehicle_weight != Common.Weights.empty.value:
             if alarm == Common.Alarm.stay.value:
-                color = QtGui.QColor(100,100,255)
+                color = QtGui.QColor(100, 100, 255)
             elif alarm == Common.Alarm.oneLevelDown.value:
-                color = QtGui.QColor(150,100,255)
+                color = QtGui.QColor(150, 100, 255)
             elif alarm == Common.Alarm.twoLevelDown.value:
-                color = QtGui.QColor(200,100,255)
+                color = QtGui.QColor(200, 100, 255)
             elif alarm == Common.Alarm.lessThanMarginTime.value:
-                color = QtGui.QColor(255,100,255)
+                color = QtGui.QColor(255, 100, 255)
             elif alarm == Common.Alarm.deliver.value:
-                color = QtGui.QColor(255,100,100)
+                color = QtGui.QColor(255, 100, 100)
 
             # Vehicle ID
             self.lbl_patente.setText(vehicle_patent)

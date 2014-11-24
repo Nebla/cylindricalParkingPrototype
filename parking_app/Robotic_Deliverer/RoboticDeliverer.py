@@ -33,6 +33,7 @@ class RoboticDeliverer(QtCore.QThread):
         print("Start running robotic deliverer")
         while True:
             car = self.obtain_car()
+            print("Robotic deliverer: car is obtained")
             if not self.place_car_into_garage(car):
                 self.wait_for_place_into_garage()
                 self.place_car_into_garage(car)
