@@ -1,9 +1,10 @@
 __author__ = 'adrian'
 
 from PyQt4 import QtGui
-from UI.PlatformUI import PlatformUI
+from parking_app.UI.PlatformUI import PlatformUI
 
-import Common as Common
+import parking_app.Common as Common
+
 
 class ParkingSlotsUI(QtGui.QWidget):
 

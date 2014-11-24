@@ -43,9 +43,9 @@ class CarFormUI(QtGui.QWidget):
         self.otro = QtGui.QRadioButton("Otro")
         self.otro.setChecked(True)
         self.otro.toggled.connect(self.otroSelected)
-        self.otroSpinBox = QtGui.QSpinBox();
+        self.otroSpinBox = QtGui.QSpinBox()
         self.otroSpinBox.setMinimum(1)
-        self.otroSpinBox.setMaximum(24)
+        self.otroSpinBox.setMaximum(1440)
 
         otherOptionLayout.addWidget(self.otro)
         otherOptionLayout.addWidget(self.otroSpinBox)
@@ -102,12 +102,12 @@ class CarFormUI(QtGui.QWidget):
         # Enviar los datos al estacionamiento
         hours = int(self.otroSpinBox.text())
         if self.estadia.isChecked():
-            hours = 12
+            hours = 720
         elif self.mediaEstadia.isChecked():
-            hours = 6
+            hours = 360
 
         vehicle = Common.Vehicle(self.patente.text(), self.getWeight())
-        self.__input_queue.put([vehicle, hours])
+        self.__input_queue.put([vehicle, hours/60])
         print('Car Form UI - Aceptar - Enviados los datos al estacionamiento')
         self.close()
 

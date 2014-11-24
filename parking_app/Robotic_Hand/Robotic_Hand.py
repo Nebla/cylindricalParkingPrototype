@@ -8,11 +8,11 @@ import parking_app.concurrent.SharedHandler as ShHan
 
 from PyQt4 import QtCore
 
+
 class RoboticHand(QtCore.QThread):
 
     # cylinder, level, column, vehicle id, vehicle weight, alarm
     update = QtCore.pyqtSignal(int, int, int, str, int, int)
-
 
     def __init__(self, cylinder_id, qtty_levels, qtty_columns):
         super(RoboticHand, self).__init__()
@@ -45,7 +45,7 @@ class RoboticHand(QtCore.QThread):
         car = cylinder.get_car(level, column)
         self.__shared_cylinder.cylinder = cylinder
 
-        self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), 0)
+        self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), Common.Alarm.stay.value)
 
         return car
 
@@ -72,7 +72,7 @@ class RoboticHand(QtCore.QThread):
         cylinder.add_car(car, level, column, hours)
         self.__shared_cylinder.data = cylinder
 
-        self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), 0)
+        self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), Common.Alarm.stay.value)
 
     def get_car_to_reorder(self):
         f = lambda x: x == Common.Alarm.oneLevelDown or Common.Alarm.twoLevelDown

@@ -8,6 +8,8 @@ from PyQt4 import QtCore
 
 class PlatformController(QtCore.QThread):
 
+    # cylinder, level, column, vehicle id, vehicle weight, alarm
+    update = QtCore.pyqtSignal(int, int, int, str, int, int)
 
     Minute = 5
 
@@ -55,8 +57,7 @@ class PlatformController(QtCore.QThread):
     def return_used_platforms(self, cylinder_id, platforms):
         f = lambda x: [x.level(), x.column()]
         positions = [f(platform) for platform in platforms]
-        print("used positions")
-        print(positions)
+
         for i in range(len(positions)):
             self.__temporal_cylinder.platforms()[positions[i][0]][positions[i][1]] = platforms[i]
 
@@ -77,11 +78,19 @@ class PlatformController(QtCore.QThread):
                     remaining_time = platform.get_remaining_time()
 
                     if remaining_time <= 0:
-                        self.set_alarm(cyl_id, Common.Alarm.deliver, level, column)
-
+                        #print("platform controller - set deliver alarm" + str([level, column]))
+                        alarm = Common.Alarm.deliver
+                        self.set_alarm(cyl_id, alarm, level, column)
+                        self.update.emit(cyl_id, level, column,
+                                         platform.vehicle().get_patent(),
+                                         platform.get_weight(), alarm.value)
                     elif remaining_time <= Common.Margin_time:
-                        self.set_alarm(cyl_id, Common.Alarm.lessThanMarginTime, level, column)
-
+                        #print("platform controller - set almost gone alarm" + str([level, column]) + str(remaining_time))
+                        alarm = Common.Alarm.lessThanMarginTime
+                        self.set_alarm(cyl_id, alarm, level, column)
+                        self.update.emit(cyl_id, level, column,
+                                         platform.vehicle().get_patent(),
+                                         platform.get_weight(), alarm.value)
 
                     if sector != Common.Sector.lower and not self.is_marked_to_leave(cyl_id, platform):
                         for sec in Common.Sector:
@@ -89,7 +98,12 @@ class PlatformController(QtCore.QThread):
                                 sector_list = [i for i in Common.Sector]
                                 lvl_down = sector_list.index(sector) - sector_list.index(sec)
                                 if lvl_down > 0:
-                                    self.set_alarm(cyl_id, Common.Alarm(lvl_down), level, column)
+                                    print("platform controller - set reorder %d levels alarm" + str([level, column]) % lvl_down)
+                                    alarm = Common.Alarm(lvl_down)
+                                    self.set_alarm(cyl_id, alarm, level, column)
+                                    self.update.emit(cyl_id, level, column,
+                                                     platform.vehicle().get_patent(),
+                                                     platform.get_weight(), alarm.value)
                                 break
                 self.return_used_platforms(cyl_id, platforms)
             self.sleep_one_minute()

@@ -105,6 +105,10 @@ class Platform():
     def __sec2hour(seconds):
         return seconds / 3600
 
+    @staticmethod
+    def __sec2min(seconds):
+        return seconds / 60
+
     # length_of_stay expressed in hours
     def save_car(self, car, length_of_stay):
         if self.__isOccupied:
@@ -131,9 +135,13 @@ class Platform():
         seconds = calendar.timegm(time.strptime(self.__timeIn, self.TimeFormat))
         return self.__sec2hour(time.time() - seconds)
 
+    def get_remaining_time_in_minutes(self):
+        seconds = self.get_remaining_time()
+        return self.__sec2min(seconds)
+
     def get_remaining_time(self):
         seconds = calendar.timegm(time.strptime(self.__timeOut, self.TimeFormat))
-        return self.__sec2hour(seconds - time.time())
+        return seconds - time.time()
 
     def is_empty(self):
         return not self.__isOccupied
@@ -177,31 +185,35 @@ class Cylinder():
 
     def get_position_to_save_car(self, length_of_stay):
         sector = self.__get_sector_from_time(length_of_stay)
-        level_range = self.__calculate_range_levels(sector)
-        col_weights = [sum([self.__platforms[lvl][col].get_weight() for lvl in level_range])
-                       for col in range(self._qttyColumns)]
+        result = self.__get_position_to_save_car([sector])
+        print(result)
+        if result is not None:
+            return result
 
-        temp_platforms = copy.deepcopy(self.__platforms)
-        for _ in range(self._qttyColumns):
-            col = col_weights.index(min(col_weights))
-            # aca hago un for de los niveles para ver si encuentro lugar
-            for lvl in level_range:
-                if temp_platforms[lvl][col].is_empty():
-                    return [lvl, col]
-            col_weights.pop(col)
-            [temp_platforms[lvl].pop(col) for lvl in level_range]
-        # list of sectors, i must do a pop(sector) and then search for free place
-
-        sector_list = [sec for sec in Sector]
+        sector_list = [sector for sector in Sector]
         sector_list.remove(sector)
+        result = self.__get_position_to_save_car(sector_list)
+        print(result)
+        if result is None:
+            raise Exception("all platforms are occupied")
+        return result
+
+    def __get_position_to_save_car(self, sector_list):
         for sector in sector_list:
             level_range = self.__calculate_range_levels(sector)
-            for lvl in level_range:
-                for col in range(self._qttyColumns):
+            col_weights = [sum([self.__platforms[lvl][col].get_weight() for lvl in level_range])
+                           for col in range(self._qttyColumns)]
+
+            temp_platforms = copy.deepcopy(self.__platforms)
+            for _ in range(self._qttyColumns):
+                col = col_weights.index(min(col_weights))
+                # aca hago un for de los niveles para ver si encuentro lugar
+                for lvl in level_range:
                     if temp_platforms[lvl][col].is_empty():
                         return [lvl, col]
+                col_weights.pop(col)
+                [temp_platforms[lvl].pop(col) for lvl in level_range]
 
-        raise Exception("all platforms are occupied")
 
     def get_remaining_time(self, level, column):
         return self.__platforms[level][column].get_remaining_time()

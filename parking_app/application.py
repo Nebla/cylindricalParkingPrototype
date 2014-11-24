@@ -56,10 +56,11 @@ class ParkingUI(QtGui.QMainWindow):
         sh_alarms = [Manager().list(alarms) for _ in range(qtty_cylinders)]
         sh_buffers = [Manager().list(car_and_hours) for _ in range(qtty_cylinders)]
 
-        platform_Controller = Platform_Controller.PlatformController(qtty_cylinders)
-        platform_Controller.initialize(cylinders, mutex_cylinders, sh_alarms,
+        platform_controller = Platform_Controller.PlatformController(qtty_cylinders)
+        platform_controller.initialize(cylinders, mutex_cylinders, sh_alarms,
                                        mutex_alarms)
-        platform_Controller.start()
+        QtCore.QObject.connect(platform_controller, QtCore.SIGNAL('update(int, int, int, QString, int, int)'), self.updateUI)
+        platform_controller.start()
 
         dispatcher_controller = Robotic_Dispatcher.RoboticDispatcher(qtty_cylinders)
 
