@@ -9,7 +9,7 @@ import parking_app.concurrent.SharedHandler as ShHan
 
 from PyQt4 import QtCore
 
-class RoboticDispatcher(QtCore.QObject):
+class RoboticDispatcher(QtCore.QThread):
 
     def __init__(self, qtty_cylinders):
         super(RoboticDispatcher, self).__init__()

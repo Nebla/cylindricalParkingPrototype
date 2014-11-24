@@ -8,7 +8,7 @@ def start(hand_id, total_levels, total_columns, cylinder, mutex_cylinder, buffer
     hand_controller.initialize(cylinder, mutex_cylinder, buffer, mutex_buffer,
                                alarms, mutex_alarms, queue)
     hand_controller.run()
-"""
 
 def start(hand_controller):
     hand_controller.run()
+"""

@@ -1,11 +1,14 @@
 __author__ = 'fsoler'
 import sys
 import parking_app.concurrent.SharedHandler as ShHan
+from PyQt4 import QtCore
 
 
-class RoboticDeliverer():
+class RoboticDeliverer(QtCore.QThread):
 
     def __init__(self):
+        super(RoboticDeliverer, self).__init__()
+
         self.__sh_conveyor = None
         self.__sh_slots = None
 

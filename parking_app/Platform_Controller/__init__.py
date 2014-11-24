@@ -8,7 +8,7 @@ def start(qtty_cyl, sh_cylinders, mutex_cyl, sh_alarms, mutex_alarms):
     platform_controller.initialize(sh_cylinders, mutex_cyl, sh_alarms,
                                    mutex_alarms)
     platform_controller.run()
-"""
 
 def start(platform_controller):
     platform_controller.run()
+"""

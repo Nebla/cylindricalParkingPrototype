@@ -8,7 +8,8 @@ def start(qtty_cylinders, cylinders, mutex_cylinders, deliver_queue, buffers, mu
     dispatcher_controller.initialize(cylinders, mutex_cylinders,
                                          deliver_queue, buffers, mutex_buffers)
     dispatcher_controller.run()
-"""
+
 
 def start(dispatcher_controller):
     dispatcher_controller.run()
+"""

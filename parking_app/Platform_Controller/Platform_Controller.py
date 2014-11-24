@@ -6,7 +6,7 @@ import parking_app.concurrent.SharedHandler as ShHan
 
 from PyQt4 import QtCore
 
-class PlatformController(QtCore.QObject):
+class PlatformController(QtCore.QThread):
 
 
     Minute = 5

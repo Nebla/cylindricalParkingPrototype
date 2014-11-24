@@ -44,8 +44,8 @@ class PlatformUI(QtGui.QWidget):
         color = QtGui.QColor(150, 150, 150)
         self.setBackgroundColor(color)
 
-        #self.lbl_vehicle.setHidden(True)
-        #self.lbl_patente.setHidden(True)
+        self.lbl_vehicle.setHidden(True)
+        self.lbl_patente.setHidden(True)
 
     def showWarningOffConfirmation(self):
         self.confirmationMessage = WarningConfirmationUI()
@@ -108,20 +108,20 @@ class PlatformUI(QtGui.QWidget):
     def updateUI(self, vehicle_patent, vehicle_weight, alarm):
         color = QtGui.QColor(150, 150, 150)
 
-        #self.lbl_vehicle.setHidden(True)
-        #self.lbl_patente.setHidden(True)
+        self.lbl_vehicle.setHidden(True)
+        self.lbl_patente.setHidden(True)
 
         if vehicle_weight != Common.Weights.empty:
 
-            if alarm == Common.Alarm.stay:
+            if alarm == Common.Alarm.stay.value:
                 color = QtGui.QColor(100,100,255)
-            elif alarm == Common.Alarm.oneLevelDown:
+            elif alarm == Common.Alarm.oneLevelDown.value:
                 color = QtGui.QColor(150,100,255)
-            elif alarm == Common.Alarm.twoLevelDown:
+            elif alarm == Common.Alarm.twoLevelDown.value:
                 color = QtGui.QColor(200,100,255)
-            elif alarm == Common.Alarm.lessThanMarginTime:
+            elif alarm == Common.Alarm.lessThanMarginTime.value:
                 color = QtGui.QColor(255,100,255)
-            elif alarm == Common.Alarm.deliver:
+            elif alarm == Common.Alarm.deliver.value:
                 color = QtGui.QColor(255,100,100)
 
             # Vehicle ID
@@ -142,7 +142,7 @@ class PlatformUI(QtGui.QWidget):
             pixmap2 = pixmap2.scaled(40, 40, QtCore.Qt.KeepAspectRatio)
             self.lbl_vehicle.setPixmap(pixmap2)
 
-            #self.lbl_vehicle.setHidden(False)
-            #self.lbl_patente.setHidden(False)
+            self.lbl_vehicle.setHidden(False)
+            self.lbl_patente.setHidden(False)
 
         self.setBackgroundColor(color)

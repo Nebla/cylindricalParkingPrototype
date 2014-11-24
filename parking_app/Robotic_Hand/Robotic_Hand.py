@@ -8,7 +8,7 @@ import parking_app.concurrent.SharedHandler as ShHan
 
 from PyQt4 import QtCore
 
-class RoboticHand(QtCore.QObject):
+class RoboticHand(QtCore.QThread):
 
     # cylinder, level, column, vehicle id, vehicle weight, alarm
     update = QtCore.pyqtSignal(int, int, int, str, int, int)
