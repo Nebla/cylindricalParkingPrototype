@@ -14,7 +14,7 @@ class TestPlatform(TestCase):
         self.platform = Platform(self.level, self.column)
 
     def test_get_level(self):
-        self.assertEqual(self.platform.level, self.level)
+        self.assertEqual(self.platform.level(), self.level)
 
     def test_save_car(self):
         hours = 3

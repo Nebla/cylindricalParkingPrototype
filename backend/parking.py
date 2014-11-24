@@ -9,6 +9,10 @@ class parking:
         logging.getLogger('CylindricalParking').debug('Ask for parking status.')
         return json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}]);
 
+class cylinder:
+    def GET(self, cylinderNumber):
+        logging.getLogger('CylyndricalParking').debug('Ask for cylinder status.')
+        return json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}])
 
 class carWithdraw:
     def POST(self, carId):
