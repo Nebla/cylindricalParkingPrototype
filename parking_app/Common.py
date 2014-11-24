@@ -191,7 +191,17 @@ class Cylinder():
             col_weights.pop(col)
             [temp_platforms[lvl].pop(col) for lvl in level_range]
         # list of sectors, i must do a pop(sector) and then search for free place
-        return [None, None]
+
+        sector_list = [sec for sec in Sector]
+        sector_list.remove(sector)
+        for sector in sector_list:
+            level_range = self.__calculate_range_levels(sector)
+            for lvl in level_range:
+                for col in range(self._qttyColumns):
+                    if temp_platforms[lvl][col].is_empty():
+                        return [lvl, col]
+
+        raise Exception("all platforms are occupied")
 
     def get_remaining_time(self, level, column):
         return self.__platforms[level][column].get_remaining_time()
