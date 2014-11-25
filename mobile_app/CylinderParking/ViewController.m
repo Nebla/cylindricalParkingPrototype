@@ -8,7 +8,9 @@
 
 #import "ViewController.h"
 
+#import "FPPopoverController.h"
 #import "PlatformCollectionViewCell.h"
+#import "CylinderSelectorViewController.h"
 
 #define COLUMNS 3
 #define LEVELS 6
@@ -20,6 +22,14 @@
 @implementation ViewController
 
 - (IBAction)onSelectCylinderTUI:(id)sender {
+    //the view controller you want to present as popover
+    CylinderSelectorViewController *controller = [[CylinderSelectorViewController alloc] init];
+    
+    //our popover
+    FPPopoverController *popover = [[FPPopoverController alloc] initWithViewController:controller];
+    
+    //the popover will be presented from the okButton view
+    [popover presentPopoverFromView:sender];
     
 }
 

@@ -35,10 +35,10 @@
     [self.errorLabel setHidden:YES];
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    sleep(1);
     
     if ([self.usernameTextField.text isEqualToString:@"admin"] && [self.passwordTextField.text isEqualToString:@"admin1234"]) {
         // Make request to get cylinder info
+        [self performSegueWithIdentifier:@"showCylinderSegue" sender:nil];
     }
     else {
         [self.errorLabel setText:@"Error: Wrong username and password combination"];
