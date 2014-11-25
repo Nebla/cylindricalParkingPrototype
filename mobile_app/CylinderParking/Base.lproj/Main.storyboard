@@ -246,6 +246,7 @@ Label Line 2</string>
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="cylinderButton" destination="dWa-13-IDV" id="sgt-ht-Fla"/>
                         <outlet property="cylinderView" destination="eaw-B3-JTE" id="RIb-OP-5Tg"/>
                     </connections>
                 </viewController>

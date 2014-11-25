@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CylinderSelectorViewController : UIViewController <UITableViewDataSource>
+#import "ViewController.h"
+
+@interface CylinderSelectorViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property(nonatomic) ViewController* cylinder;
 
 @end

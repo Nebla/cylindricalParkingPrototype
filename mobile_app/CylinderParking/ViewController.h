@@ -10,9 +10,11 @@
 
 @interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate> {
     
+    __weak IBOutlet UIButton *cylinderButton;
     __weak IBOutlet UICollectionView *cylinderView;
 }
 
+- (void) selectedNewCylinder:(NSInteger)cylinder;
 
 @end
 

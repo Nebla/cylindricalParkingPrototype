@@ -14,6 +14,13 @@
 
 @implementation CylinderSelectorViewController
 
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -33,6 +40,13 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.cylinder selectedNewCylinder:indexPath.row];
+}
+
 
 #pragma mark - UITableViewDataSource
 

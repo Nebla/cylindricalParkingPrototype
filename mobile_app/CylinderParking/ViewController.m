@@ -21,10 +21,16 @@
 
 @implementation ViewController
 
+- (void) selectedNewCylinder:(NSInteger)cylinder {
+    // Get new cylinder info
+}
+
+
+
 - (IBAction)onSelectCylinderTUI:(id)sender {
     //the view controller you want to present as popover
     CylinderSelectorViewController *controller = [[CylinderSelectorViewController alloc] init];
-    
+    controller.cylinder = self;
     //our popover
     FPPopoverController *popover = [[FPPopoverController alloc] initWithViewController:controller];
     
