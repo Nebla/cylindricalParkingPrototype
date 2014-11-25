@@ -83,6 +83,9 @@ class ParkingUI(QtGui.QMainWindow):
             hand_controller.start()
             time.sleep(1)
 
+        # va a ser raro el connect dado que el update esta dentro de la clase de parking slot, si anda genial, si no anda
+        # hay que hacer que el método devuelva col y lvl para la visual.
+
         self.__cylinders = [ShHan.SharedHandler(cylinders[i], mutex_cylinders[i]) for i in range(len(cylinders))]
         self.__parking_slot = ShHan.SharedHandler(parking_slot, mutex_parking_slot)
 
