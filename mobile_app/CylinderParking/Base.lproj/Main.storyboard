@@ -1,9 +1,124 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="6sz-C7-ZMf">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="BCb-c0-Mev">
+            <objects>
+                <viewController storyboardIdentifier="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6sz-C7-ZMf" customClass="LoginViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tu1-vv-7RE"/>
+                        <viewControllerLayoutGuide type="bottom" id="V1J-a8-efl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="lFF-At-YEb">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="97F-G8-JPd">
+                                <rect key="frame" x="20" y="20" width="400" height="600"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <state key="normal">
+                                    <color key="titleShadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="-7" y="-232" width="400" height="830"/>
+                                </variation>
+                                <connections>
+                                    <action selector="onDismissKeyboardButton:" destination="6sz-C7-ZMf" eventType="touchUpInside" id="Q5F-bP-Kcy"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="images.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="Mt3-Cp-cxc">
+                                <rect key="frame" x="20" y="113" width="400" height="254"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="97" width="320" height="195"/>
+                                </variation>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cylindrical Parking" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="spa-DU-uF9">
+                                <rect key="frame" x="56" y="48" width="328" height="50"/>
+                                <fontDescription key="fontDescription" name="GurmukhiMN" family="Gurmukhi MN" pointSize="25"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="28" width="320" height="50"/>
+                                </variation>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5LQ-EH-AMO">
+                                <rect key="frame" x="69" y="422" width="304" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="8" y="335" width="304" height="30"/>
+                                </variation>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mHW-3U-Cpu">
+                                <rect key="frame" x="73" y="460" width="295" height="30"/>
+                                <state key="normal" title="Login">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="373" width="320" height="30"/>
+                                </variation>
+                                <connections>
+                                    <action selector="onLoginButtonTUI:" destination="6sz-C7-ZMf" eventType="touchUpInside" id="r4D-Fh-tAI"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ubC-2z-JuR" userLabel="Error Label">
+                                <rect key="frame" x="36" y="509" width="368" height="21"/>
+                                <string key="text">Label Line 1
+Label Line 2</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.67934534671532842" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="424" width="320" height="44"/>
+                                </variation>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qRB-WO-SNp">
+                                <rect key="frame" x="69" y="393" width="304" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="8" y="307" width="304" height="30"/>
+                                </variation>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="97F-G8-JPd"/>
+                                <exclude reference="Mt3-Cp-cxc"/>
+                                <exclude reference="spa-DU-uF9"/>
+                                <exclude reference="5LQ-EH-AMO"/>
+                                <exclude reference="mHW-3U-Cpu"/>
+                                <exclude reference="ubC-2z-JuR"/>
+                                <exclude reference="qRB-WO-SNp"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="97F-G8-JPd"/>
+                                <include reference="Mt3-Cp-cxc"/>
+                                <include reference="spa-DU-uF9"/>
+                                <include reference="5LQ-EH-AMO"/>
+                                <include reference="mHW-3U-Cpu"/>
+                                <include reference="ubC-2z-JuR"/>
+                                <include reference="qRB-WO-SNp"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="errorLabel" destination="ubC-2z-JuR" id="VN6-PX-2qF"/>
+                        <outlet property="passwordTextField" destination="5LQ-EH-AMO" id="ywh-37-e3h"/>
+                        <outlet property="usernameTextField" destination="qRB-WO-SNp" id="zBE-nM-lzc"/>
+                        <segue destination="vXZ-lx-hvc" kind="show" identifier="showCylinderSegue" id="CLb-kl-h2I"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cxL-Ge-dKs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-670.5" y="325"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
@@ -24,11 +139,15 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="16" y="20" width="368" height="30"/>
                                 </variation>
+                                <connections>
+                                    <action selector="onSelectCylinderTUI:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="SCn-ZL-SPl"/>
+                                </connections>
                             </button>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eaw-B3-JTE">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eaw-B3-JTE">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TsN-kU-Df6">
-                                    <size key="itemSize" width="100" height="100"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="tG1-Ra-yvL">
+                                    <size key="itemSize" width="90" height="90"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -38,7 +157,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="90" height="90"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vLs-hj-McD">
@@ -48,24 +167,25 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                     </variation>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9x6-YW-tK1">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9x6-YW-tK1">
                                                     <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="29" y="8" width="42" height="21"/>
+                                                        <rect key="frame" x="0.0" y="8" width="90" height="21"/>
                                                     </variation>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="45h-KE-ew2">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="25" y="37" width="50" height="50"/>
+                                                        <rect key="frame" x="20" y="37" width="50" height="50"/>
                                                     </variation>
                                                 </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <size key="customSize" width="90" height="90"/>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="vLs-hj-McD"/>
@@ -87,9 +207,6 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="16" y="58" width="368" height="522"/>
-                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="vXZ-lx-hvc" id="7ax-Lq-cbe"/>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="xvq-er-Bki"/>
@@ -97,10 +214,22 @@
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="eaw-B3-JTE" secondAttribute="bottom" constant="20" id="0fF-du-0Kv"/>
+                            <constraint firstItem="eaw-B3-JTE" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="Kwl-c1-ZOi"/>
+                            <constraint firstItem="eaw-B3-JTE" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="58" id="OYq-3H-R8C"/>
+                            <constraint firstAttribute="trailing" secondItem="eaw-B3-JTE" secondAttribute="trailing" constant="16" id="lW3-Lu-Or9"/>
+                        </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="dWa-13-IDV"/>
                                 <exclude reference="eaw-B3-JTE"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="0fF-du-0Kv"/>
+                                <exclude reference="Kwl-c1-ZOi"/>
+                                <exclude reference="OYq-3H-R8C"/>
+                                <exclude reference="lW3-Lu-Or9"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -108,12 +237,24 @@
                                 <include reference="dWa-13-IDV"/>
                                 <include reference="eaw-B3-JTE"/>
                             </mask>
+                            <mask key="constraints">
+                                <include reference="0fF-du-0Kv"/>
+                                <include reference="Kwl-c1-ZOi"/>
+                                <include reference="OYq-3H-R8C"/>
+                                <include reference="lW3-Lu-Or9"/>
+                            </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="cylinderView" destination="eaw-B3-JTE" id="RIb-OP-5Tg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139.5" y="136"/>
+            <point key="canvasLocation" x="126" y="173"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="images.jpeg" width="274" height="184"/>
+    </resources>
 </document>
