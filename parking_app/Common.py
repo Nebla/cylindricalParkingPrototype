@@ -107,7 +107,7 @@ class Platform():
         return hours * 3600
 
     @staticmethod
-    def __sec2hour(seconds):
+    def sec2hour(seconds):
         return seconds / 3600
 
     @staticmethod
@@ -136,13 +136,17 @@ class Platform():
     def get_weight(self):
         return self.__vehicle.get_weight()
 
-    def get_elapsed_time(self):
+    def get_elapsed_time_in_hours(self):
         seconds = calendar.timegm(time.strptime(self.__timeIn, self.TimeFormat))
-        return self.__sec2hour(time.time() - seconds)
+        return self.sec2hour(time.time() - seconds)
 
     def get_remaining_time_in_minutes(self):
         seconds = self.get_remaining_time()
         return self.__sec2min(seconds)
+
+    def get_remaining_time_in_hours(self):
+        seconds = self.get_remaining_time()
+        return self.sec2hour(seconds)
 
     def get_remaining_time(self):
         seconds = calendar.timegm(time.strptime(self.__timeOut, self.TimeFormat))
@@ -221,7 +225,7 @@ class Cylinder():
 
 
     def get_remaining_time(self, level, column):
-        return self.__platforms[level][column].get_remaining_time()
+        return self.__platforms[level][column].get_remaining_time_in_hours()
 
     def get_car(self, level, column):
         self._qttyOccupied -= 1

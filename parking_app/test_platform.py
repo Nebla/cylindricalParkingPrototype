@@ -44,7 +44,7 @@ class TestPlatform(TestCase):
         hours = 3
         self.platform.save_car(self.car, hours)
 
-        self.assertAlmostEqual(self.platform.get_elapsed_time(), 0, None, "hello", 0.002)
+        self.assertAlmostEqual(self.platform.get_elapsed_time_in_hours(), 0, None, "hello", 0.002)
 
     def test_get_remaining_time(self):
         hours = 24

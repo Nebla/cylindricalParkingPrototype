@@ -41,9 +41,7 @@ class RoboticHand(QtCore.QThread):
         platforms = self.__get_platforms(f)
         [level, column] = platforms[0]
 
-        cylinder = self.__shared_cylinder.data
-        car = cylinder.get_car(level, column)
-        self.__shared_cylinder.data = cylinder
+        car = self.__get_car_from_platform(level, column)
         print("robotic hand, deliver car")
         self.update.emit(self._id, level, column, car.get_patent(), Common.Weights.empty.value, None)
 
@@ -76,15 +74,18 @@ class RoboticHand(QtCore.QThread):
         self.update.emit(cylinder.id(), level, column, car.get_patent(),car.get_weight(), Common.Alarm.stay.value)
 
     def get_car_to_reorder(self):
-        f = lambda x: x == Common.Alarm.oneLevelDown or Common.Alarm.twoLevelDown
+        f = lambda x: x == Common.Alarm.oneLevelDown or x == Common.Alarm.twoLevelDown
         platforms_to_reorder = self.__get_platforms(f)
 
         [level, column] = platforms_to_reorder[0]
-        car = self.__get_car_from_platform(level, column)
 
         cylinder = self.__shared_cylinder.data
         hours = cylinder.get_remaining_time(level, column)
         self.__shared_cylinder.data = cylinder
+
+        car = self.__get_car_from_platform(level, column)
+        self.update.emit(self._id, level, column, car.get_patent(), Common.Weights.empty.value, None)
+
         return [car, hours]
 
     def car_to_reorder(self):
