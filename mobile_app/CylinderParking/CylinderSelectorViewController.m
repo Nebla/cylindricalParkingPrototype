@@ -45,13 +45,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.cylinder selectedNewCylinder:indexPath.row];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -64,7 +67,10 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    cell.textLabel.text = [NSString stringWithFormat:@"Cylinder %ld",(long)indexPath.row];
+    if (indexPath.row < 3)
+        cell.textLabel.text = [NSString stringWithFormat:@"Cylinder %ld",(long)indexPath.row];
+    else
+        cell.textLabel.text = @"Parking Slot";
     
     return cell;
     

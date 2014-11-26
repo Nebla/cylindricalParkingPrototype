@@ -13,7 +13,7 @@
 #import "CylinderSelectorViewController.h"
 
 #define COLUMNS 3
-#define LEVELS 6
+#define LEVELS 5
 
 @interface ViewController ()
 
@@ -21,15 +21,73 @@
 
 @implementation ViewController
 
-- (void) selectedNewCylinder:(NSInteger)cylinder {
-    // Get new cylinder info
+- (void) viewWillAppear:(BOOL) animated
+{
+    [super viewWillAppear:animated];
+    [cylinderButton setTitle:@"Cylinder 1" forState:UIControlStateNormal];
+    
+    vehicles = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < COLUMNS * LEVELS; ++i) {
+        NSString *patente = @"";
+        NSString *imagen = @"";
+        UIColor *color = [UIColor colorWithRed:150/255.0 green:150/255.0 blue:150/255.0 alpha:1];
+        
+        int randNum = rand() % (999 - 100) + 100; //create the random number.
+        
+        int randColor = rand() % (5 - 1) + 1;
+        
+        switch (i % 5) {
+            case 0:
+                patente = @"AAA";
+                patente = [NSString stringWithFormat:@"%@-%d",patente,randNum];
+                imagen = @"MotoSide.png";
+                color = [self getColor:randColor];
+                break;
+            case 1:
+                patente = @"BBB";
+                patente = [NSString stringWithFormat:@"%@-%d",patente,randNum];
+                imagen = @"CarSide.png";
+                color = [self getColor:randColor];
+                break;
+            case 2:
+                patente = @"CCC";
+                patente = [NSString stringWithFormat:@"%@-%d",patente,randNum];
+                imagen = @"AutoTruckSide.png";
+                color = [self getColor:randColor];
+                break;
+            case 3:
+                patente = @"DDD";
+                patente = [NSString stringWithFormat:@"%@-%d",patente,randNum];
+                imagen = @"TrukSide.png";
+                color = [self getColor:randColor];
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+        NSDictionary *dic = [[NSDictionary alloc] initWithObjectsAndKeys:patente,@"patente",imagen,@"imagen",color,@"color", nil];
+        [vehicles addObject:dic];
+    }
 }
 
 
+- (void) selectedNewCylinder:(NSInteger)cylinder {
+    // Get new cylinder info
+    if (cylinder < 3) {
+        [cylinderButton setTitle:[NSString stringWithFormat:@"Cylinder %ld",(long)cylinder] forState:UIControlStateNormal];
+    }
+    else {
+        [cylinderButton setTitle:@"Parking Slot" forState:UIControlStateNormal];
+    }
+    
+}
 
 - (IBAction)onSelectCylinderTUI:(id)sender {
     //the view controller you want to present as popover
-    CylinderSelectorViewController *controller = [[CylinderSelectorViewController alloc] init];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    CylinderSelectorViewController *controller = (CylinderSelectorViewController *)[sb instantiateViewControllerWithIdentifier:@"CylinderSelectorViewController"];
     controller.cylinder = self;
     //our popover
     FPPopoverController *popover = [[FPPopoverController alloc] initWithViewController:controller];
@@ -38,6 +96,46 @@
     [popover presentPopoverFromView:sender];
     
 }
+
+- (UIColor *)getColor:(NSInteger)index {
+    UIColor *backgroundColor = [UIColor colorWithRed:150/255.0 green:150/255.0 blue:150/255.0 alpha:1];
+    switch (index) {
+        case 1:
+            backgroundColor = [UIColor colorWithRed:100/255.0 green:100/255.0 blue:255/255.0 alpha:1];
+            break;
+        case 2:
+            backgroundColor = [UIColor colorWithRed:255/255.0 green:100/255.0 blue:100/255.0 alpha:1];
+            break;
+        case 3:
+            backgroundColor = [UIColor colorWithRed:150/255.0 green:100/255.0 blue:255/255.0 alpha:1];
+            break;
+        case 4:
+            backgroundColor = [UIColor colorWithRed:200/255.0 green:100/255.0 blue:255/255.0 alpha:1];
+            break;
+        case 5:
+            backgroundColor = [UIColor colorWithRed:255/255.0 green:100/255.0 blue:255/255.0 alpha:1];
+            break;
+        default:
+            break;
+    }
+    
+    return backgroundColor;
+
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSString *patente = [[vehicles objectAtIndex:indexPath.row] objectForKey:@"patente"];
+    
+    if ([patente length] > 0) {
+        NSString *msg = [NSString stringWithFormat:@"Do you want to withdraw vehicle %@",patente];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirmation" message:msg delegate:nil cancelButtonTitle:@"Acept" otherButtonTitles:@"Cancel", nil];
+        [alert show];
+
+    }
+}
+
 
 #pragma mark - UICollectionViewDataSource
 
@@ -51,39 +149,13 @@
     
     PlatformCollectionViewCell *cell = (PlatformCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     
-    NSString *patente = @"";
-    NSString *vehicleName = @"";
-    UIColor *backGroundColor = [UIColor grayColor];
-    switch (indexPath.row % 5) {
-        case 0:
-            patente = @"AAA-111";
-            vehicleName = @"MotoSide.png";
-            backGroundColor = [UIColor redColor];
-            break;
-        case 1:
-            patente = @"BBB-222";
-            vehicleName = @"CarSide.png";
-            backGroundColor = [UIColor greenColor];
-            break;
-        case 2:
-            patente = @"CCC-333";
-            vehicleName = @"AutoTruckSide.png";
-            backGroundColor = [UIColor blueColor];
-            break;
-        case 3:
-            patente = @"DDD-444";
-            vehicleName = @"TrukSide.png";
-            backGroundColor = [UIColor purpleColor];
-            break;
-        case 4:
-            break;
-        default:
-            break;
-    }
     
-    [cell.backgroundView setBackgroundColor:backGroundColor];
-    [cell.vehicleIdLabel setText:patente];
-    [cell.vehicleImage setImage:[UIImage imageNamed:vehicleName]];
+    
+    NSMutableDictionary *dict = [vehicles objectAtIndex:indexPath.row];
+    
+    [cell.backgroundView setBackgroundColor:[dict objectForKey:@"color"]];
+    [cell.vehicleIdLabel setText:[dict objectForKey:@"patente"]];
+    [cell.vehicleImage setImage:[UIImage imageNamed:[dict objectForKey:@"imagen"]]];
     
     return cell;
 }
