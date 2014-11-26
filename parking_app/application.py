@@ -41,7 +41,7 @@ class ParkingUI(QtGui.QMainWindow):
 
         parking_manager = ParkingSlotManager()
         parking_manager.start()
-        parking_slot = parking_manager.ParkingSlot(qtty_slots)
+        parking_slot = parking_manager.ParkingSlots(qtty_slots)
 
         self.__input_queue = Queue()
         deliver_queue = Queue()
@@ -196,15 +196,18 @@ class ParkingUI(QtGui.QMainWindow):
         print("Should update ui - cylinder %d level %d column %d patent %s"%(cylinder, level, column, vehicle_patent))
         self.cylindersUI[cylinder].updatePlatform(level, column, vehicle_patent, vehicle_weight, alarm)
 
+
 class CylinderManager(BaseManager):
     pass
 
 CylinderManager.register("Cylinder", Common.Cylinder)
 
+
 class ParkingSlotManager(BaseManager):
     pass
 
-ParkingSlotManager.register("ParkingSlot", Common.ParkingSlots)
+ParkingSlotManager.register("ParkingSlots", Common.ParkingSlots)
+
 
 def main():
     # we must use the bounded semaphore

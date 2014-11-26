@@ -39,11 +39,12 @@ class Sector(Enum):
     high = 9999
 
 
-class ParkingSlots():
+class ParkingSlots(QtCore.QObject):
     # level, column, vehicle id, vehicle weight
     update = QtCore.pyqtSignal(int, int, str, int)
 
     def __init__(self, quantity_slots=10):
+        super(ParkingSlots, self).__init__()
         self.__levels = 2
         self.__columns = int(quantity_slots/self.__levels)
         self.__slots = [[None for _ in range(self.__columns)]
