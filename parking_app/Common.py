@@ -9,7 +9,7 @@ import copy
 esta clase alarma es para reordenar los autos o sacarlos, el mensaje pone la alarma en deliver
 '''
 # this is the margin time to deliver the car, in seconds
-Margin_time = 9000
+Margin_time = 900
 Input_id = 1
 Conveyor_input_id = 1
 Conveyor_output_id = 2
@@ -48,12 +48,10 @@ class ParkingSlots():
     def save_car(self, car):
         free_slots = self.__get_index_free_spaces()
         if not free_slots:
-            print("ParkingSlots: hmm... there is no free slots")
-            return False
+            return -1
         lvl = free_slots[0]
         self.__slots[lvl] = car
-        print("ParkingSlots car is saved in" + str(lvl))
-        return True
+        return lvl
     
     def get_car(self, lvl):
         if self.__slots[lvl] is None:

@@ -197,7 +197,7 @@ class ParkingUI(QtGui.QMainWindow):
         print("Muestra pop up para retirar un auto")
 
     def updateUI(self, cylinder, level, column, vehicle_patent, vehicle_weight, alarm):
-        print("Should update ui - cylinder %d level %d column %d patent %s"%(cylinder, level, column, vehicle_patent))
+        #print("Should update ui - cylinder %d level %d column %d patent %s"%(cylinder, level, column, vehicle_patent))
         self.cylindersUI[cylinder].updatePlatform(level, column, vehicle_patent, vehicle_weight, alarm)
 
 

@@ -28,6 +28,7 @@ class RoboticDeliverer(QtCore.QThread):
         self.__sh_slots.data = parking_slots
         result = lvl >= 0
         if result:
+            print("emit in lvl %d with patent %s and weight %f" % (lvl, car.get_patent(), car.get_weight()))
             self.update.emit(lvl, car.get_patent(), car.get_weight())
         return result
 

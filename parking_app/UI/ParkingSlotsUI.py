@@ -28,5 +28,5 @@ class ParkingSlotsUI(QtGui.QWidget):
         self.setLayout(v_layout)
 
     def updateSlot(self, level, vehicle_patent, vehicle_weight):
-        print("Should update SlotUI")
+        #print("Should update SlotUI in " + str(level))
         self.__slots_ui[level].updateUI(vehicle_patent, vehicle_weight)
