@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate> {
-    
+    NSMutableArray *vehicles;
     __weak IBOutlet UIButton *cylinderButton;
     __weak IBOutlet UICollectionView *cylinderView;
 }
