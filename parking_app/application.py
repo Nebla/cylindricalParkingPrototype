@@ -87,6 +87,11 @@ class ParkingUI(QtGui.QMainWindow):
         # hay que hacer que el método devuelva col y lvl para la visual.
 
         self.__cylinders = [ShHan.SharedHandler(cylinders[i], mutex_cylinders[i]) for i in range(len(cylinders))]
+
+        self.__parking_slot_UI = ParkingSlotsUI()
+        QtCore.QObject.connect(platform_controller, QtCore.SIGNAL('update(int, int, QString, int)'),
+                               self.__parking_slot_UI.initUI)
+
         self.__parking_slot = ShHan.SharedHandler(parking_slot, mutex_parking_slot)
 
         self.init_ui()
@@ -115,7 +120,8 @@ class ParkingUI(QtGui.QMainWindow):
             self.cylindersUI.append(cylinderUI)
             i.data = cylinder
 
-        main_layout.addWidget(ParkingSlotsUI(self.__parking_slot))
+        #main_layout.addWidget(ParkingSlotsUI(self.__parking_slot))
+        main_layout.addWidget(self.__parking_slot_UI)
 
         # central widget
         central_widget = QtGui.QWidget()

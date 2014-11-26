@@ -9,9 +9,10 @@ import parking_app.Common as Common
 
 class ParkingSlotsUI(QtGui.QWidget):
 
-    def __init__(self, parkingSlots):
+    #def __init__(self, parkingSlots):
+    def __init__(self):
         super(ParkingSlotsUI, self).__init__()
-        self.parkingSlots = parkingSlots
+        #self.parkingSlots = parkingSlots
         self.initUI()
 
     def initUI(self):
@@ -26,4 +27,5 @@ class ParkingSlotsUI(QtGui.QWidget):
         self.setLayout(vLayout)
 
     def updateSlot(self, level, column, vehicle_patent, vehicle_weight):
+        print("Should update SlotUI")
         self.slotUI[level].updateUI(vehicle_patent, vehicle_weight)

@@ -53,10 +53,11 @@ class ParkingSlots(QtCore.QObject):
     def save_car(self, car):
         free_slots = self.__get_index_free_spaces()
         if not free_slots:
+            print("ParkingSlots: hmm... there is no free slots")
             return False
         [lvl, col] = free_slots[0]
         self.__slots[lvl][col] = car
-
+        print("ParkingSlots car is saved in" + str([lvl, col]))
         self.update.emit(lvl, col, car.get_patent(), car.get_weight())
         return True
     
@@ -72,7 +73,7 @@ class ParkingSlots(QtCore.QObject):
         levels = range(self.__levels)
         columns = range(self.__columns)
         return [[lvl, col] for lvl in levels for col in columns
-                if self.__slots[lvl][col] is not None]
+                if self.__slots[lvl][col] is None]
 
 class Vehicle():
     def __init__(self, patent, weight=Weights['veryLight']):

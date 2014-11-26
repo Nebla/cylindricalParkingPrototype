@@ -115,14 +115,13 @@ class PlatformController(QtCore.QThread):
                                          platform.vehicle().get_patent(),
                                          platform.get_weight(), alarm.value)
 
-
                     if sector != Common.Sector.lower and not self.is_marked_to_leave(cyl_id, platform):
                         for sec in Common.Sector:
                             if sec.value/2 > remaining_time:
                                 sector_list = [i for i in Common.Sector]
                                 lvl_down = sector_list.index(sector) - sector_list.index(sec)
                                 if lvl_down > 0:
-                                    print("platform controller - set reorder %d levels alarm" + str([level, column]) % lvl_down)
+                                    print("platform controller - set reorder" + str(lvl_down) + " levels alarm" + str([level, column]))
                                     alarm = Common.Alarm(lvl_down)
                                     self.set_alarm(cyl_id, alarm, level, column)
                                     self.update.emit(cyl_id, level, column,

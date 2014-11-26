@@ -47,7 +47,6 @@ class SlotUI(QtGui.QWidget):
         p.setColor(self.backgroundRole(), color)
         self.setPalette(p)
 
-
     def updateUI(self, vehicle_patent, vehicle_weight):
 
 
