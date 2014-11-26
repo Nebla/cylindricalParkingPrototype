@@ -2,6 +2,7 @@ __author__ = 'adrian'
 
 from PyQt4 import QtGui
 from parking_app.UI.PlatformUI import PlatformUI
+from parking_app.UI.SlotUI import SlotUI
 
 import parking_app.Common as Common
 
@@ -16,13 +17,13 @@ class ParkingSlotsUI(QtGui.QWidget):
     def initUI(self):
         vLayout = QtGui.QVBoxLayout()
 
-        self.setLayout(vLayout )
+        self.slotsUI = [None]*10
+        for i in range(10):
+            slot = SlotUI()
+            self.slotsUI[i] = slot
+            vLayout.addWidget(slot);
 
-        """
-        positions = [(i, j) for i in range(self.cylinder.qtty_levels) for j in range(self.cylinder.qtty_columns)]
+        self.setLayout(vLayout)
 
-        platforms = self.cylinder.platforms
-        for [lvl, col] in positions:
-            platformUI = PlatformUI(platforms[lvl][col])
-            grid.addWidget(platformUI, *[lvl, col])
-        """
+    def updateSlot(self, level, column, vehicle_patent, vehicle_weight):
+        self.slotUI[level].updateUI(vehicle_patent, vehicle_weight)
