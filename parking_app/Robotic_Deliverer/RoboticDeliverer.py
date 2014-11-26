@@ -6,6 +6,9 @@ from PyQt4 import QtCore
 
 class RoboticDeliverer(QtCore.QThread):
 
+    # level, column, vehicle id, vehicle weight
+    update = QtCore.pyqtSignal(int, str, int)
+
     def __init__(self):
         super(RoboticDeliverer, self).__init__()
 
@@ -21,8 +24,11 @@ class RoboticDeliverer(QtCore.QThread):
 
     def place_car_into_garage(self, car):
         parking_slots = self.__sh_slots.data
-        result = parking_slots.save_car(car)
+        lvl = parking_slots.save_car(car)
         self.__sh_slots.data = parking_slots
+        result = lvl >= 0
+        if result:
+            self.update.emit(lvl, car.get_patent(), car.get_weight())
         return result
 
     def wait_for_place_into_garage(self):

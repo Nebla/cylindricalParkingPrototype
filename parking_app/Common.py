@@ -39,41 +39,37 @@ class Sector(Enum):
     high = 9999
 
 
-class ParkingSlots(QtCore.QObject):
-    # level, column, vehicle id, vehicle weight
-    update = QtCore.pyqtSignal(int, int, str, int)
+class ParkingSlots():
 
     def __init__(self, quantity_slots=10):
-        super(ParkingSlots, self).__init__()
-        self.__levels = 2
-        self.__columns = int(quantity_slots/self.__levels)
-        self.__slots = [[None for _ in range(self.__columns)]
-                        for _ in range(self.__levels)]
+        self.__levels = quantity_slots
+        self.__slots = [None for _ in range(self.__levels)]
 
     def save_car(self, car):
         free_slots = self.__get_index_free_spaces()
         if not free_slots:
             print("ParkingSlots: hmm... there is no free slots")
             return False
-        [lvl, col] = free_slots[0]
-        self.__slots[lvl][col] = car
-        print("ParkingSlots car is saved in" + str([lvl, col]))
-        self.update.emit(lvl, col, car.get_patent(), car.get_weight())
+        lvl = free_slots[0]
+        self.__slots[lvl] = car
+        print("ParkingSlots car is saved in" + str(lvl))
         return True
     
-    def get_car(self, lvl, col):
-        if self.__slots[lvl][col] is None:
+    def get_car(self, lvl):
+        if self.__slots[lvl] is None:
             raise Exception("can not get a car from free slot")
-        self.update.emit(lvl, col, "", Weights.empty.value)
-        car = self.__slots[lvl][col]
-        self.__slots[lvl][col] = None
+        car = self.__slots[lvl]
+        self.__slots[lvl] = None
         return car
 
     def __get_index_free_spaces(self):
         levels = range(self.__levels)
-        columns = range(self.__columns)
-        return [[lvl, col] for lvl in levels for col in columns
-                if self.__slots[lvl][col] is None]
+        return [lvl for lvl in levels if self.__slots[lvl] is None]
+
+    def get_length(self):
+        length = self.__levels
+        return length
+
 
 class Vehicle():
     def __init__(self, patent, weight=Weights['veryLight']):

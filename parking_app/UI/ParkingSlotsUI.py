@@ -9,23 +9,24 @@ import parking_app.Common as Common
 
 class ParkingSlotsUI(QtGui.QWidget):
 
-    #def __init__(self, parkingSlots):
-    def __init__(self):
+    def __init__(self, parkingSlots):
         super(ParkingSlotsUI, self).__init__()
-        #self.parkingSlots = parkingSlots
-        self.initUI()
+        self.__parkingSlots = parkingSlots
+        self.__slots_ui = None
+        self.init_ui()
 
-    def initUI(self):
-        vLayout = QtGui.QVBoxLayout()
+    def init_ui(self):
+        v_layout = QtGui.QVBoxLayout()
 
-        self.slotsUI = [None]*10
-        for i in range(10):
-            slot = SlotUI()
-            self.slotsUI[i] = slot
-            vLayout.addWidget(slot);
+        parking_slots = self.__parkingSlots.data
+        levels = parking_slots.get_length()
+        self.__parkingSlots.data = parking_slots
 
-        self.setLayout(vLayout)
+        self.__slots_ui = [SlotUI() for i in range(levels)]
+        [v_layout.addWidget(slot) for slot in self.__slots_ui]
 
-    def updateSlot(self, level, column, vehicle_patent, vehicle_weight):
+        self.setLayout(v_layout)
+
+    def updateSlot(self, level, vehicle_patent, vehicle_weight):
         print("Should update SlotUI")
-        self.slotUI[level].updateUI(vehicle_patent, vehicle_weight)
+        self.__slots_ui[level].updateUI(vehicle_patent, vehicle_weight)
