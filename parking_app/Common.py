@@ -52,8 +52,15 @@ class ParkingSlots():
         lvl = free_slots[0]
         self.__slots[lvl] = car
         return lvl
-    
-    def get_car(self, lvl):
+
+    def get_car(self, patent):
+        levels = [i for i, car in enumerate(self.__slots) if car is not None and car.has_this_patent(patent)]
+        if not levels:
+            return -1
+        self.__remove_car(levels[0])
+        return levels[0]
+
+    def __remove_car(self, lvl):
         if self.__slots[lvl] is None:
             raise Exception("can not get a car from free slot")
         car = self.__slots[lvl]

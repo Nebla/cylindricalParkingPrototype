@@ -75,7 +75,8 @@ class ParkingUI(QtGui.QMainWindow):
         robotic_deliverer_controller.initialize(deliver_queue, parking_slot,
                                                 mutex_parking_slot)
 
-        self.__parking_slot_UI = ParkingSlotsUI(ShHan.SharedHandler(parking_slot, mutex_parking_slot))
+        self.__parking_slot = ShHan.SharedHandler(parking_slot, mutex_parking_slot)
+        self.__parking_slot_UI = ParkingSlotsUI(self.__parking_slot)
         QtCore.QObject.connect(robotic_deliverer_controller, QtCore.SIGNAL('update(int, QString, int)'),
                                self.__parking_slot_UI.updateSlot)
         robotic_deliverer_controller.start()
@@ -145,13 +146,13 @@ class ParkingUI(QtGui.QMainWindow):
         simulate_menu = self.menuBar().addMenu('&Simulate')
 
         alarm_action = QtGui.QAction(QtGui.QIcon('Warning.png'), 'Alarma Aleatoria', self)
-        alarm_action.triggered.connect(self.createCustomAlarm);
+        alarm_action.triggered.connect(self.createCustomAlarm)
 
         new_car_action = QtGui.QAction(QtGui.QIcon('Logo.png'), 'Estacionar Vehiculo', self)
-        new_car_action.triggered.connect(self.addNewCar);
+        new_car_action.triggered.connect(self.addNewCar)
 
         withdraw_car_action = QtGui.QAction(QtGui.QIcon('Car.png'), 'Retirar Vehiculo', self)
-        withdraw_car_action.triggered.connect(self.withdrawCar);
+        withdraw_car_action.triggered.connect(self.withdrawCar)
 
         simulate_menu.addAction(alarm_action)
         simulate_menu.addAction(new_car_action)
@@ -170,7 +171,7 @@ class ParkingUI(QtGui.QMainWindow):
         new_car_action.triggered.connect(self.addNewCar)
 
         withdraw_car_action= QtGui.QAction(QtGui.QIcon('Car.png'), 'Retirar Vehiculo', self)
-        withdraw_car_action.triggered.connect(self.withdrawCar);
+        withdraw_car_action.triggered.connect(self.withdrawCar)
 
         exit_toolbar = self.addToolBar('Exit')
         exit_toolbar.addAction(exit_action)
@@ -199,9 +200,11 @@ class ParkingUI(QtGui.QMainWindow):
 
     def withdrawCar(self):
         print("Muestra pop up para retirar un auto")
-        self.withdraw_car_form = WithdrawFormUI()
+        self.withdraw_car_form = WithdrawFormUI(self.__parking_slot)
         self.withdraw_car_form.resize(400, 200)
         self.withdraw_car_form.move(150,150)
+        QtCore.QObject.connect(self.withdraw_car_form, QtCore.SIGNAL('update(int, QString, int)'),
+                               self.__parking_slot_UI.updateSlot)
         self.withdraw_car_form.show()
 
     def updateUI(self, cylinder, level, column, vehicle_patent, vehicle_weight, alarm):
