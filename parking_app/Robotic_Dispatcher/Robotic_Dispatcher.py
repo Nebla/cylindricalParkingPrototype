@@ -84,7 +84,7 @@ class RoboticDispatcher(QtCore.QThread):
                 self.sleep(2)
                 available_cylinders = self.get_available_cylinders()
 
-            weights = [cyl.weight for cyl in available_cylinders]
+            weights = [cyl.weight() for cyl in available_cylinders]
             cyl_id = available_cylinders[weights.index(min(weights))].id()
             self.save_car(car_and_hours, cyl_id, available_cylinders)
             print("Robot dispatcher - Saved car")
