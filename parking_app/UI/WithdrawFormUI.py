@@ -2,13 +2,18 @@ __author__ = 'adrian'
 
 from PyQt4 import QtGui
 from PyQt4 import QtCore
+import parking_app.Common as Common
 
 import random
 
 class WithdrawFormUI(QtGui.QWidget):
 
-    def __init__(self, parent=None):
+    # level, column, vehicle id, vehicle weight
+    update = QtCore.pyqtSignal(int, str, int)
+
+    def __init__(self, parking_slot, parent=None):
         super(WithdrawFormUI, self).__init__(parent)
+        self.__parking_slot = parking_slot
         self.initUI()
 
     def initUI(self):
@@ -41,7 +46,14 @@ class WithdrawFormUI(QtGui.QWidget):
 
     def acept(self):
         print('Aceptar')
-        # Enviar los datos al estacionamiento
+        parking_slots = self.__parking_slot.data
+        lvl = parking_slots.get_car(self.patente.text())
+        self.__parking_slot.data = parking_slots
+
+        if lvl >= 0:
+            self.update.emit(lvl, "", Common.Weights.empty.value)
+
+        self.close()
 
     def cancel(self):
         print('Cancelar')
