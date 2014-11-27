@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A3D4EA41A2763BF0044BC0D /* SlotTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A3D4EA31A2763BF0044BC0D /* SlotTableViewCell.m */; };
 		3A48C0C11A23F2C2002FEF71 /* AutoTruckSide.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A48C0B91A23F2C2002FEF71 /* AutoTruckSide.png */; };
 		3A48C0C21A23F2C2002FEF71 /* Car.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A48C0BA1A23F2C2002FEF71 /* Car.png */; };
 		3A48C0C31A23F2C2002FEF71 /* CarSide.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A48C0BB1A23F2C2002FEF71 /* CarSide.png */; };
@@ -44,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3A3D4EA21A2763BF0044BC0D /* SlotTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlotTableViewCell.h; sourceTree = "<group>"; };
+		3A3D4EA31A2763BF0044BC0D /* SlotTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlotTableViewCell.m; sourceTree = "<group>"; };
 		3A48C0B91A23F2C2002FEF71 /* AutoTruckSide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AutoTruckSide.png; sourceTree = "<group>"; };
 		3A48C0BA1A23F2C2002FEF71 /* Car.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Car.png; sourceTree = "<group>"; };
 		3A48C0BB1A23F2C2002FEF71 /* CarSide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CarSide.png; sourceTree = "<group>"; };
@@ -190,6 +193,8 @@
 				3A48C0DA1A23F99E002FEF71 /* LoginViewController.m */,
 				3A48C0EB1A2405C3002FEF71 /* CylinderSelectorViewController.h */,
 				3A48C0EC1A2405C3002FEF71 /* CylinderSelectorViewController.m */,
+				3A3D4EA21A2763BF0044BC0D /* SlotTableViewCell.h */,
+				3A3D4EA31A2763BF0044BC0D /* SlotTableViewCell.m */,
 			);
 			path = CylinderParking;
 			sourceTree = "<group>";
@@ -383,6 +388,7 @@
 				3A48C0D51A23F7DC002FEF71 /* FPPopoverController.m in Sources */,
 				3AA417321A23CF230064F787 /* main.m in Sources */,
 				3AA417591A23EE590064F787 /* PlatformCollectionViewCell.m in Sources */,
+				3A3D4EA41A2763BF0044BC0D /* SlotTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -45,9 +45,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.cylinder selectedNewCylinder:indexPath.row];
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
 }
 
 

@@ -168,7 +168,7 @@ Label Line 2</string>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="45h-KE-ew2">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="20" y="32" width="50" height="50"/>
+                                                        <rect key="frame" x="20" y="37" width="50" height="50"/>
                                                     </variation>
                                                 </imageView>
                                             </subviews>
@@ -213,6 +213,67 @@ Label Line 2</string>
                                     <action selector="onSelectCylinderTUI:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="SCn-ZL-SPl"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="UPS-Wv-0ya">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SlotTableViewCell" id="UXb-A1-z4W" customClass="SlotTableViewCell">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UXb-A1-z4W" id="Aeo-2E-eGd">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U3X-8R-lX2">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                                    <color key="backgroundColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.58823529411764708" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <variation key="widthClass=compact" fixedFrame="YES">
+                                                        <rect key="frame" x="0.0" y="0.0" width="90" height="90"/>
+                                                    </variation>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tjE-iE-F8T">
+                                                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="widthClass=compact" fixedFrame="YES">
+                                                        <rect key="frame" x="0.0" y="5" width="90" height="21"/>
+                                                    </variation>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oxR-re-exd">
+                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                    <variation key="widthClass=compact" fixedFrame="YES">
+                                                        <rect key="frame" x="20" y="32" width="50" height="50"/>
+                                                    </variation>
+                                                </imageView>
+                                            </subviews>
+                                            <variation key="default">
+                                                <mask key="subviews">
+                                                    <exclude reference="U3X-8R-lX2"/>
+                                                    <exclude reference="tjE-iE-F8T"/>
+                                                    <exclude reference="oxR-re-exd"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <mask key="subviews">
+                                                    <include reference="U3X-8R-lX2"/>
+                                                    <include reference="tjE-iE-F8T"/>
+                                                    <include reference="oxR-re-exd"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="vehicleIdLabel" destination="tjE-iE-F8T" id="mhx-jU-XJz"/>
+                                            <outlet property="vehicleImage" destination="oxR-re-exd" id="YD5-Pw-a4D"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="115" y="58" width="90" height="490"/>
+                                </variation>
+                                <connections>
+                                    <outlet property="dataSource" destination="vXZ-lx-hvc" id="byT-16-LGM"/>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="569-67-bza"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
@@ -225,6 +286,7 @@ Label Line 2</string>
                             <mask key="subviews">
                                 <exclude reference="eaw-B3-JTE"/>
                                 <exclude reference="dWa-13-IDV"/>
+                                <exclude reference="UPS-Wv-0ya"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="0fF-du-0Kv"/>
@@ -237,6 +299,7 @@ Label Line 2</string>
                             <mask key="subviews">
                                 <include reference="eaw-B3-JTE"/>
                                 <include reference="dWa-13-IDV"/>
+                                <include reference="UPS-Wv-0ya"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="0fF-du-0Kv"/>
@@ -249,6 +312,7 @@ Label Line 2</string>
                     <connections>
                         <outlet property="cylinderButton" destination="dWa-13-IDV" id="sgt-ht-Fla"/>
                         <outlet property="cylinderView" destination="eaw-B3-JTE" id="RIb-OP-5Tg"/>
+                        <outlet property="parkingSlotView" destination="UPS-Wv-0ya" id="ozO-iV-Fwe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -313,12 +377,12 @@ Label Line 2</string>
                                 <exclude reference="ke7-N3-xfK"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="15p-Px-LNt"/>
+                                <exclude reference="oEl-Oz-tQw"/>
                                 <exclude reference="Syv-2y-yoG"/>
                                 <exclude reference="cb5-tm-f3A"/>
                                 <exclude reference="ppm-6q-NKP"/>
                                 <exclude reference="tOe-Z1-IYu"/>
-                                <exclude reference="15p-Px-LNt"/>
-                                <exclude reference="oEl-Oz-tQw"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -327,12 +391,12 @@ Label Line 2</string>
                                 <include reference="ke7-N3-xfK"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="15p-Px-LNt"/>
+                                <include reference="oEl-Oz-tQw"/>
                                 <include reference="Syv-2y-yoG"/>
                                 <include reference="cb5-tm-f3A"/>
                                 <include reference="ppm-6q-NKP"/>
                                 <include reference="tOe-Z1-IYu"/>
-                                <include reference="15p-Px-LNt"/>
-                                <include reference="oEl-Oz-tQw"/>
                             </mask>
                         </variation>
                     </view>

@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate> {
+@class FPPopoverController;
+
+@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource> {
     NSMutableArray *vehicles;
+    NSMutableArray *parkingSlot;
+
     __weak IBOutlet UIButton *cylinderButton;
     __weak IBOutlet UICollectionView *cylinderView;
+    
+    __weak IBOutlet UITableView *parkingSlotView;
+    NSInteger currentCylinder;
+    FPPopoverController *popover;
+    
+    NSInteger selectedIndex;
 }
 
 - (void) selectedNewCylinder:(NSInteger)cylinder;
